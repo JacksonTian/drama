@@ -1,0 +1,48 @@
+<section id="home" class="page">
+    <article>
+        <div class="content-secondary"> 
+
+            <div id="jqm-homeheader"> 
+                <h1 id="jqm-logo"><img src="docs/_assets/images/jquery-logo.png" alt="jQuery Mobile Framework" /></h1> 
+                <p>A Web Framework for Smartphones &amp; Tablets</p> 
+                <p id="jqm-version">Beta Release</p> 
+            </div> 
+
+            <p class="intro"><strong>Welcome.</strong> Browse the jQuery Mobile components and learn how to make rich, accessible, touch-friendly websites and apps.</p> 
+
+            <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="f"> 
+                <li data-role="list-divider">Overview</li> 
+                <li><a href="docs/about/intro.html">Intro to jQuery Mobile</a></li> 
+                <li><a href="docs/about/features.html">Features</a></li> 
+                <li><a href="docs/about/accessibility.html">Accessibility</a></li> 
+                <li><a href="docs/about/platforms.html">Supported platforms</a></li> 
+            </ul> 
+
+        </div>
+
+        <div class="content-primary"> 
+            <nav> 
+                <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b"> 
+                    <li data-role="list-divider">Components</li> 
+                    <li><a href="docs/pages/index.html">Pages &amp; dialogs</a></li> 
+                    <li><a href="docs/toolbars/index.html">Toolbars</a></li> 
+                    <li><a href="docs/buttons/index.html">Buttons</a></li> 
+                    <li><a href="docs/content/index.html">Content formatting</a></li> 
+                    <li><a href="docs/forms/index.html">Form elements</a></li> 
+                    <li><a href="docs/lists/index.html">List views</a></li> 
+
+                    <li data-role="list-divider">API</li> 
+                    <li><a href="docs/api/globalconfig.html">Configuring defaults</a></li> 
+                    <li><a href="docs/api/events.html">Events</a></li> 
+                    <li><a href="docs/api/methods.html">Methods &amp; Utilities</a></li> 
+                    <li><a href="docs/api/mediahelpers.html">Responsive Layout</a></li> 
+                    <li><a href="docs/api/themes.html">Theme framework</a></li> 
+                </ul> 
+            </nav> 
+        </div>
+    </article> 
+
+    <footer> 
+            <p>&copy; 2011 The V5 Framework Project</p> 
+    </footer>
+</section>
