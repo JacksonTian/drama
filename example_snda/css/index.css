@@ -1,0 +1,102 @@
+#index header {
+    font-size: 2em;
+    padding: 0.5em;
+    background: -webkit-linear-gradient(top, #eee, #ccc);
+    background: -o-linear-gradient(top, #eee, #ccc);
+    background: -ms-linear-gradient(top, #eee, #ccc);
+    background: linear-gradient(top, #eee, #ccc);
+}
+#index header h1 {
+    display: inline-block;
+}
+#index header h1 a {
+    text-decoration: none;
+}
+#index header span {
+    float: right;
+    text-align: center;
+    color: #fff;
+    width: 1em;
+    height: 1em;
+    line-height: 1em;
+    font-size: 0.9em;
+    background: #000;
+    border-radius: 0.25em;
+    box-shadow: 0px 1px 0px #fff;
+    cursor: pointer;
+}
+
+#index  #search {
+    height: 3.2em;
+    padding: 0 1em;
+    background: #555;
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    -webkit-box-align: center;
+    display: -moz-box;
+    -moz-box-orient: horizontal;
+    -moz-box-align: center;
+    display: box;
+    box-orient: horizontal;
+    box-align: center;
+}
+#index  #search form {
+    width: 100%;
+}
+#index  #search input {
+    width: 50%;
+    display: inline;
+}
+
+#index  nav {
+    background: #ddd;
+}
+#index  nav li {
+    text-align: center;
+    height: 2em;
+    line-height: 2em;
+    width: 24%;
+    display: inline-block;
+}
+#index  nav li a {
+    display: block;
+}
+#index  nav li a:active {
+    background: #eee;
+}
+
+#index #sliderFrame {
+    overflow: hidden;
+    width: 100%;
+    margin: 1em 0;
+}
+
+
+#index #listing {
+    margin: 1em 1em 0;
+}
+#index #listing ul {
+    margin-bottom: 1em;
+}
+#index #listing ul li {
+    padding: 0.8em;
+    font-size: 0.8em;
+}
+#index #listing ul li:nth-child(odd) {
+    border-left: 5px solid #222;
+    background: #ddd;
+}
+#index #listing ul li:nth-child(even) {
+    border-left: 5px solid #46abef;
+    background: #eed;
+}
+#index #listing ul li h3 {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0.2em 0 0.4em;
+}
+#index footer {
+    text-align: center;
+    height: 2em;
+    line-height: 2em;
+}
