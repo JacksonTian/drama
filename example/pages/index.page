@@ -1,0 +1,23 @@
+<section id="index" class="page">
+    <header> 
+        <h1><a href="#">盛大创新院</a></h1> 
+        <span>?</span>
+    </header>
+
+    <nav> 
+        <ul> 
+            <li><a href="#">首页</a></li> 
+            <li><a href="#">产品</a></li> 
+            <li><a href="#">活动</a></li> 
+            <li><a href="#">关于</a></li> 
+        </ul> 
+    </nav>
+
+    <section id="listing"> 
+
+    </section> 
+
+    <footer> 
+        <p>sii 2011 &copy; all rights reserved</p> 
+    </footer> 
+</section>
