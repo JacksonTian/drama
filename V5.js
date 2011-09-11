@@ -211,7 +211,8 @@
 
         var loadingNode = column.find(".column_loading").removeClass("hidden");
         var page = V5._pages[hash];
-        V5.getView(hash, page.enableL10N, function (view) {
+        var enableL10N = (page && page.enableL10N) || false;
+        V5.getView(hash, enableL10N, function (view) {
             loadingNode.addClass("hidden");
             if (viewport === V5.viewport) {
                 viewport.attr("class", V5.columnModes[_.size(V5.hashMap) - 1]);
