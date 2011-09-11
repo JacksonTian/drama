@@ -5,14 +5,14 @@ V5.registerPage("home", function () {
         var page = this;
         var view = V5.View(page.node);
 
-        view.bind("getDetail", function (event) {
+        view.bind("redirect", function (event) {
             var target = $(event.currentTarget);
-            var index = target.data("index");
-            page.openView("item/" + index);
+            var hash = target.attr("href");
+            page.openView(hash.replace("#", ""));
         });
 
         view.delegateEvents({
-            //"click #listing li": "getDetail",
+            "click .listview a": "redirect",
         });
     };
 

@@ -12,37 +12,36 @@
             <ul class="listview"> 
                 <li class="divider">Overview</li> 
                 <li><a href="#intro">Intro to V5 Framework</a></li> 
-                <li><a href="#features">Features</a></li> 
+                <li><a href="#features">Features</a></li>
                 <li><a href="#dependencies">Dependencies</a></li>
+                <li><a href="#landscape">Landscape</a></li>
             </ul>
 
         </div>
 
         <div class="content-primary"> 
-            <nav>
-                <ul class="listview">
-                    <li class="divider">Components</li> 
-                    <li><a href="#component/app">App</a></li> 
-                    <li><a href="#component/viewports">Viewports</a></li> 
-                    <li><a href="#component/viewcolumns">View Columns</a></li> 
-                    <li><a href="#component/pages">Pages</a></li>
-                    <li><a href="#component/views">Views</a></li>
-                    
-                    <li class="divider">Lifecycle of Page</li> 
-                    <li><a href="#lifecycle/initialize">Initialize</a></li> 
-                    <li><a href="#lifecycle/shrink">Shrink</a></li>
-                    <li><a href="#lifecycle/reappear">Reappear</a></li>
-                    <li><a href="#lifecycle/destroy">Destroy</a></li>
+            <ul class="listview">
+                <li class="divider">Components</li> 
+                <li><a href="#component/app">App</a></li> 
+                <li><a href="#component/viewports">Viewports</a></li> 
+                <li><a href="#component/viewcolumns">View Columns</a></li> 
+                <li><a href="#component/pages">Pages</a></li>
+                <li><a href="#component/views">Views</a></li>
+                
+                <li class="divider">Lifecycle of Page</li> 
+                <li><a href="#lifecycle/initialize">Initialize</a></li> 
+                <li><a href="#lifecycle/shrink">Shrink</a></li>
+                <li><a href="#lifecycle/reappear">Reappear</a></li>
+                <li><a href="#lifecycle/destroy">Destroy</a></li>
 
-                    <li class="divider">Communication</li> 
-                    <li><a href="#communication/message">Message</a></li> 
+                <li class="divider">Communication</li> 
+                <li><a href="#communication/message">Message</a></li> 
 
-                    <li class="divider">MVC of Page</li> 
-                    <li><a href="#mvc/controller">Controller</a></li> 
-                    <li><a href="#mvc/view">View</a></li>
-                    <li><a href="#mvc/model">Model</a></li>
-                </ul>
-            </nav>
+                <li class="divider">MVC of Page</li> 
+                <li><a href="#mvc/controller">Controller</a></li> 
+                <li><a href="#mvc/view">View</a></li>
+                <li><a href="#mvc/model">Model</a></li>
+            </ul>
         </div>
     </article>
 
