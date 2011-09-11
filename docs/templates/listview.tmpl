@@ -1,0 +1,9 @@
+<ul class="listview">
+<% _.each(list, function (item, index) {%>
+    <li data-index="<%= index+1 %>">
+        <h3><%=item.title%></h3> 
+        <p><strong><%=item.short_desc%></strong></p> 
+        <p><%=item.detail%></p> 
+    </li>
+<%});%>
+</ul>
