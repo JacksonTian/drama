@@ -21,7 +21,7 @@ ul.listview li:first-child {
 ul.listview li:last-child {
     border-bottom: 1px solid #ccc;
     -webkit-border-bottom-left-radius: 9px;
-    -webkit-border-bottom-right-radius: 9px];
+    -webkit-border-bottom-right-radius: 9px;
 }
 ul.listview li.divider {
     padding: 7px 15px;
