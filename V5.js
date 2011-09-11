@@ -239,6 +239,8 @@
                 page.parameters = args;
                 page.viewport = viewport;
             });
+        } else {
+            throw hash + " module doesn't be defined.";
         }
     };
 
