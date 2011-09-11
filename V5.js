@@ -199,23 +199,24 @@
             V5.hashHistory.push([hash].concat(args));
         }
 
-        var page = V5._pages[hash];
-        if (page) {
-            var previousPage = column.find("section.page.active").removeClass("active");
-            if (previousPage.length) {
-                var id = previousPage.attr('id');
-                var previous = V5._pages[id];
-                if (previous && id !== hash) {
-                    previous.shrink();
-                }
-            }
 
-            var loadingNode = column.find(".column_loading").removeClass("hidden");
-            V5.getView(hash, page.enableL10N, function (view) {
-                loadingNode.addClass("hidden");
-                if (viewport === V5.viewport) {
-                    viewport.attr("class", V5.columnModes[_.size(V5.hashMap) - 1]);
-                }
+        var previousPage = column.find("section.page.active").removeClass("active");
+        if (previousPage.length) {
+            var id = previousPage.attr('id');
+            var previous = V5._pages[id];
+            if (previous && id !== hash) {
+                previous.shrink();
+            }
+        }
+
+        var loadingNode = column.find(".column_loading").removeClass("hidden");
+        var page = V5._pages[hash];
+        V5.getView(hash, page.enableL10N, function (view) {
+            loadingNode.addClass("hidden");
+            if (viewport === V5.viewport) {
+                viewport.attr("class", V5.columnModes[_.size(V5.hashMap) - 1]);
+            }
+            if (page) {
                 page.columnIndex = _.indexOf(V5.columns, columnName);
                 if (!page.initialized) {
                     column.append(view);
@@ -237,8 +238,8 @@
                 page.node.addClass("active");
                 page.parameters = args;
                 page.viewport = viewport;
-            });
-        }
+            }
+        });
     };
 
     V5.hashHistory = [];
