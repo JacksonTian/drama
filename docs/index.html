@@ -20,7 +20,7 @@
         .script("https://github.com/V5Framework/V5/raw/master/lib/underscore.js").wait()
         .script("https://github.com/V5Framework/V5/raw/master/lib/backbone-0.5.3.js").wait()
         .script("https://github.com/V5Framework/V5/raw/master/V5.js").wait()
-        .script("scripts/index.js").wait(function () {
+        .script("scripts/home.js").wait(function () {
             V5.initView = function () {
                 V5.trigger("openView", "home", 0);
             };
