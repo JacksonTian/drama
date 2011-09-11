@@ -9,6 +9,7 @@ V5.registerPage("home", function () {
             var target = $(event.currentTarget);
             var hash = target.attr("href");
             page.openView(hash.replace("#", ""));
+            event.preventDefault();
         });
 
         view.delegateEvents({
