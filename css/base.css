@@ -122,6 +122,7 @@ input.error {
     display: block;
     position: relative;
     overflow: hidden;
+    width: 100%;
 }
 .alpha,
 .beta,
