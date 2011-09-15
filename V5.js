@@ -56,7 +56,7 @@
         V5.ready(function () {
             V5.viewport = $("#container");
             V5.setOrientation();
-            //window.addEventListener("touchmove", function (e) {e.preventDefault(); }, false);
+            window.addEventListener("touchmove", function (e) {e.preventDefault(); }, false);
             window.addEventListener('popstate', function (event) {
                 var params = event.state;
                 if (params) {
