@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>V5 Framework Docs</title>
+    <link rel="apple-touch-icon" href="images/icon.png" />
+    <link rel="stylesheet" href="http://v5framework.com/css/base.css" />
+    <link rel="stylesheet" href="css/common.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/landscape.css" />
+    <script src="http://v5framework.com/lib/LAB.src.js"></script>
+    <script>
+        $LAB.script("http://v5framework.com/lib/storage.js")
+        .script("http://v5framework.com/lib/zepto.js")
+        .script("http://v5framework.com/lib/eventproxy.js")
+        .script("http://v5framework.com/lib/underscore.js").wait()
+        .script("http://v5framework.com/lib/backbone-0.5.3.js").wait()
+        .script("http://v5framework.com/V5.js").wait()
+        .script("scripts/index.js")
+        .script("scripts/landscape.js").wait(function () {
+            V5.init();
+        });
+    </script>
+</head>
+<body>
+<div id="container">
+    <div class="alpha"></div>
+    <div class="beta"></div>
+    <div class="gamma"></div>
+</div>
+</body>
+</html>
