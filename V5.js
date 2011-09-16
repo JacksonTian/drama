@@ -221,6 +221,7 @@
                 if (!page.initialized) {
                     column.append(view);
                     page.node = view;
+                    page.node.addClass("active");
                     page.initialize.apply(page, args);
                     page.initialized = true;
                 } else {
@@ -231,11 +232,11 @@
                         V5.getView(hash, page.enableL10N, arguments.callee);
                         return;
                     } else {
+                        page.node.addClass("active");
                         page.reappear();
                     }
                 }
 
-                page.node.addClass("active");
                 page.parameters = args;
                 page.viewport = viewport;
             });
