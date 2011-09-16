@@ -1,5 +1,5 @@
-V5.registerPage("home", function () {
-    console.log("Home page");
+V5.registerPage("index", function () {
+    console.log("Index page");
 
     var initialize = function () {
         var page = this;
@@ -12,8 +12,16 @@ V5.registerPage("home", function () {
             event.preventDefault();
         });
 
+        view.scroller = new iScroll(view.$(".iscroll")[0], {
+            useTransform : false,
+            onBeforeScrollStart : function (e) {
+            }
+        });
+        
+        view.scroller.refresh();
+
         view.delegateEvents({
-            "click .listview a": "redirect",
+            "click .listview a": "redirect"
         });
     };
 

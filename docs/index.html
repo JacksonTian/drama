@@ -10,22 +10,19 @@
     <link rel="apple-touch-icon" href="images/icon.png" />
     <link rel="stylesheet" href="http://v5framework.com/css/base.css" />
     <link rel="stylesheet" href="css/common.css" />
-    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/index.css" />
     <link rel="stylesheet" href="css/landscape.css" />
-    <link rel="stylesheet" href="css/item.css" />
     <script src="http://v5framework.com/lib/LAB.src.js"></script>
     <script>
         $LAB.script("http://v5framework.com/lib/storage.js")
         .script("http://v5framework.com/lib/zepto.js")
+        .script("http://v5framework.com/lib/iscroll.js")
         .script("http://v5framework.com/lib/eventproxy.js")
         .script("http://v5framework.com/lib/underscore.js").wait()
         .script("http://v5framework.com/lib/backbone-0.5.3.js").wait()
         .script("http://v5framework.com/V5.js").wait()
-        .script("scripts/home.js")
+        .script("scripts/index.js")
         .script("scripts/landscape.js").wait(function () {
-            V5.initView = function () {
-                V5.trigger("openView", "home", 0);
-            };
             V5.init();
         });
     </script>

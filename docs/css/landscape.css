@@ -1,9 +1,100 @@
 #landscape {
-    
+    background-color: #e5e5e5;
+}
+#landscape header {
+    padding: 0 15px 0;
+    height: 42px;
+    background-image: -webkit-gradient(linear, left top, left bottom,
+        color-stop(0, #74b042),
+        color-stop(1, #56a00e));
+    display: -webkit-box;
+    color: #fff;
+    -webkit-box-align: center;
+}
+#landscape header h2 {
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 -1px 1px #234403;
+    -webkit-box-flex: 1;
+    text-align: center;
+}
+#landscape header .holder {
+    width: 64px;
+}
+#landscape header .home {
+    height: 30px;
+    width: 64px;
+    padding: 0 0 0 5px;
+    background-image: url("../images/back.png");
+    background-repeat: no-repeat;
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    -webkit-box-sizing: border-box;
+    font-weight: bold;
+    font-size: 15px;
+    color: #fff;
+}
+#landscape header .home:hover {
+    text-decoration: none;
+}
+#landscape article {
+    font-weight: bold;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    padding: 80px 10px 0 10px;
+}
+#landscape article div {
+    border: 3px solid #fff;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-sizing: border-box;
+    display: -webkit-box;
+    padding: 0 0 3px 0;
+}
+#landscape article a {
+    color: #fff;
+    -webkit-box-flex: 1;
+    display: -webkit-box;
+    -webkit-box-align: end;
+    padding: 2px 0 3px 0;
+}
+#landscape article a:hover {
+    text-decoration: none;
 }
 #landscape .app {
-    
+    width: 300px;
+    height: 300px;
+    -webkit-border-radius: 150px;
+    background-color: #ea157a;
 }
 #landscape .viewports {
-    
+    width: 250px;
+    height: 250px;
+    -webkit-border-radius: 125px;
+    background-color: #feb80a;
+}
+#landscape .view_columns {
+    width: 200px;
+    height: 200px;
+    -webkit-border-radius: 100px;
+    background-color: #00addc;
+}
+#landscape .pages {
+    width: 150px;
+    height: 150px;
+    -webkit-border-radius: 75px;
+    background-color: #738ac8;
+}
+#landscape .views {
+    width: 100px;
+    height: 100px;
+    -webkit-border-radius: 50px;
+    background-color: #1ab39f;
+}
+#landscape .views a {
+    -webkit-box-align: center;
+    padding: 0 0 0 0;
 }

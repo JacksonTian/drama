@@ -7,12 +7,22 @@ ul.listview li {
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
-    background-image: -webkit-linear-gradient(top,#fdfdfd,#eee);
+    background-image: -webkit-gradient(linear, left top, left bottom,
+        color-stop(0, #fdfdfd),
+        color-stop(1, #eee));
+}
+ul.listview li:hover {
+    background-image: -webkit-gradient(linear, left top, left bottom,
+        color-stop(0, #ededed),
+        color-stop(1, #dadada));
 }
 ul.listview li a {
     font-weight: bold;
     color: #2f3e46;
     text-shadow: 0 1px 1px #f6f6f6;
+}
+ul.listview li a:hover {
+    text-decoration: none;
 }
 ul.listview li:first-child {
     -webkit-border-top-left-radius: 9px;
@@ -25,7 +35,10 @@ ul.listview li:last-child {
 }
 ul.listview li.divider {
     padding: 7px 15px;
-    background-image: -webkit-linear-gradient(top, #74b042, #56a00e);
+    background-image: -webkit-linear-gradient(top, );
+    background-image: -webkit-gradient(linear, left top, left bottom,
+        color-stop(0, #74b042),
+        color-stop(1, #56a00e));
     font-weight: bold;
     border: 1px solid #56a00e;
     text-shadow: 0 -1px 1px #234403;

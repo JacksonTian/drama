@@ -1,16 +1,20 @@
 <section id="landscape" class="page">
-    <h2>Landscape</h2>
+    <header>
+        <div class="holder"><a class="home" href="javascript:;">Home</a></div>
+        <h2>Landscape</h2>
+        <div class="holder"></div>
+    </header>
     <article> 
         <div class="app">
-            App
+            <a href="#component/app">App</a>
             <div class="viewports">
-                Viewports
+                <a href="#component/viewports">Viewports</a>
                 <div class="view_columns">
-                    View Columns
+                    <a href="#component/viewcolumns">View Columns</a>
                     <div class="pages">
-                        Pages
+                        <a href="#component/pages">Pages</a>
                         <div class="views">
-                            Views
+                            <a href="#component/views">Views</a>
                         </div>
                     </div>
                 </div>
