@@ -1,0 +1,27 @@
+<section id="index" class="page">
+    <header>
+        <h1 class="logo"><img src="http://v5framework/images/logo.png" alt="V5 Mobile Web App Framework" /></h1> 
+        <p>A Mobile Web App Framework for Smartphones &amp; Tablets</p> 
+        <p class="version">Beta Release</p>
+    </header>
+    <article>
+        <div class="content-secondary"> 
+
+            <p class="intro"><strong>Welcome.</strong> Browse the V5 mobile web framework.</p> 
+
+            <ul class="listview"> 
+                <li class="divider">Overview</li> 
+                <li><a href="#intro">Intro to V5 Framework</a></li> 
+                <li><a href="#features">Features</a></li>
+                <li><a href="#dependencies">Dependencies</a></li>
+                <li><a href="#landscape">Landscape</a></li>
+            </ul>
+
+        </div>
+
+    </article>
+
+    <footer> 
+            <p>&copy; 2011 The V5 Framework Project</p> 
+    </footer>
+</section>

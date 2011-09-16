@@ -56,7 +56,7 @@
         V5.ready(function () {
             V5.viewport = $("#container");
             V5.setOrientation();
-            //window.addEventListener("touchmove", function (e) {e.preventDefault(); }, false);
+            window.addEventListener("touchmove", function (e) {e.preventDefault(); }, false);
             window.addEventListener('popstate', function (event) {
                 var params = event.state;
                 if (params) {
@@ -221,6 +221,7 @@
                 if (!page.initialized) {
                     column.append(view);
                     page.node = view;
+                    page.node.addClass("active");
                     page.initialize.apply(page, args);
                     page.initialized = true;
                 } else {
@@ -231,11 +232,11 @@
                         V5.getView(hash, page.enableL10N, arguments.callee);
                         return;
                     } else {
+                        page.node.addClass("active");
                         page.reappear();
                     }
                 }
 
-                page.node.addClass("active");
                 page.parameters = args;
                 page.viewport = viewport;
             });
