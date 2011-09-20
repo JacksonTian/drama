@@ -8,8 +8,10 @@
 (function (global) {
 
     /**
-     * @description The Framework's top object.
-     * @namespace Top namespace, all components will be register under it.
+     * @description The Framework's top object. all components will be register under it.
+     * @namespace Top namespace. Why named as V5, we salute the V8 project.
+     * The voice means it contains power in Chinese also.
+     * @requires Underscore, jQuery/Zepto.
      * @name V5
      */
     var V5 = function () {};
@@ -41,11 +43,12 @@
 
     /**
     * @description Gets the V5 mode, detects the V5 runing in which devices.
+    * There are two modes current, phone or tablet.
     */
     V5.mode = window.innerWidth < 768 ? "phone" : "tablet";
 
     /**
-    * @description Viewport references, detected by V5.mode.
+    * @description Default viewport reference. Viewport could contains many view columns, it's detected by mode.
     */
     V5.viewport = null;
 
@@ -56,7 +59,9 @@
         V5.ready(function () {
             V5.viewport = $("#container");
             V5.setOrientation();
+            // Disable touch move events for integrate with iScroll.
             window.addEventListener("touchmove", function (e) {e.preventDefault(); }, false);
+            // Use popstate to handle history go/back.
             window.addEventListener('popstate', function (event) {
                 var params = event.state;
                 if (params) {
@@ -85,15 +90,15 @@
                 }
             }, false);
 
+            // Handle refresh case or first visit.
             if (V5.hashHistory.length === 0) {
-                // TODO Case is fresh
                 var map = V5.hashMap;
                 if (_.size(map)) {
-                    // TODO Restore view from session.
+                    // Restore view from session.
                     console.log("Restore from session.");
                     V5.restoreViews();
                 } else {
-                    // TODO Init view.
+                    // Init view.
                     console.log("Init view.");
                     V5.initView();
                 }
@@ -102,6 +107,9 @@
     };
 
     var body = $("body");
+    /**
+     * @description Handle orient change events.
+     */
     V5.setOrientation = function () {
         var _setOrientation = function () {
             var orient = Math.abs(window.orientation) === 90 ? 'landscape' : 'portrait';
@@ -117,7 +125,13 @@
      */
     V5._pageCache = {};
 
+    /**
+     * @description Predefined view columns.
+     */
     V5.columns = ["alpha", "beta", "gamma"];
+    /**
+     * @description Predefined viewport's state.
+     */
     V5.columnModes = ["single", "double", "triple"];
 
     V5.bind("openView", function (viewName, effectColumn, args, viewport) {
@@ -131,10 +145,16 @@
         history.pushState(hash, viewName, "#" + hash);
     });
 
+    /**
+     * @description Initializes views when first time visit.
+     */
     V5.initView = function () {
         V5.trigger("openView", "index", 0);
     };
 
+    /**
+     * @description Restores views from session storage.
+     */
     V5.restoreViews = function () {
         var map = V5.hashMap;
         console.log(map);
@@ -149,6 +169,8 @@
      * @description Gets View from cache or server. If the view file come from server, 
      * the callback will be executed async, and cache it.
      * @param {string} viewName View name.
+     * @param {boolean} enableL10N Flag whether this view's localization enabled.
+     * If true, will generate view with localization resources.
      * @param {function} callback Callback function, will be called after got the view from cache or server.
      */
     V5.getView = function (viewName, enableL10N, callback) {
@@ -181,6 +203,14 @@
         }
     };
 
+    /**
+     * @description Display view in view column.
+     * @private
+     * @param {string} hash View hash, view name.
+     * @param {number} effectColumn View column's index.
+     * @param {array} args Parameters of view.
+     * @param {object} viewport Which viewport, if don't set, will use default viewport.
+     */
     V5.displayView = function (hash, effectColumn, args, viewport) {
         var columnName = V5.columns[effectColumn];
         var column = viewport.find("." + columnName);
@@ -245,17 +275,14 @@
         }
     };
 
+    /**
+     * @description History implementation. Stores history actions.
+     */
     V5.hashHistory = [];
 
-    V5.sessionHistory = (function () {
-        var session = getStorage("session");
-
-        $(window).bind("unload", function () {
-            session.put("history", V5.hashHistory);
-        });
-        return session.get("history");
-    }());
-
+    /**
+     * @description Store hash and keep in session storage.
+     */
     V5.hashMap = (function () {
         var session = getStorage("session");
         var hashMap = session.get("hashMap");
@@ -279,7 +306,7 @@
 (function (global) {
     /**
      * @description A factory method to generate View object. Packaged on Backbone.View.
-     * @param {node} node a Zepto element node.
+     * @param {node} node a $(Zepto/jQuery) element node.
      * @returns {View} View object, based on Backbone.View.
      */
     V5.View = function (node) {
@@ -372,11 +399,6 @@
         }
     };
 
-    /**
-    * @description Define a page component.
-    * @constructor V5.Page.
-    * @param {function} module Module object.
-    */    
     var Page = function (module) {
         // Mixin the eventproxy's prototype
         _.extend(this, EventProxy.prototype);
@@ -415,6 +437,7 @@
 
     /**
      * @description Open a view from current column or next column.
+     * @memberOf Page.prototype
      */
     Page.prototype.openView = function (hash, blank) {
         var effectColumn;
@@ -479,6 +502,13 @@
         return this;
     };
 
+    /**
+     * @description Define a page component. Page will be displayed in a view colomn.
+     * @param {function} module Module object.
+     * @class Represents a page.
+     * @constructor V5.Page.
+     * @memberOf V5
+     */
     V5.Page = Page;
 }(window));
 
@@ -491,7 +521,7 @@
     V5._modules = {};
 
     /**
-     * @description Call a common module.
+     * @description Register a common module.
      */
     V5.registerModule = function (moduleId, module) {
         V5._modules[moduleId] = module;
