@@ -10,6 +10,9 @@
     width: 100%;
     overflow: hidden;
 }
+#index .scroller {
+    width: 100%;
+}
 #index header {
     padding: 15px 15px 0;
     text-align: center;
