@@ -1,5 +1,5 @@
 Welcome to the V5 framework!  
-[V5 Framework Homepage](http://v5framework.com/) [中文版主页](http://v5framework.com/index_cn.html)  
+[V5 Framework Homepage](http://v5framework.com/) | [中文版主页](http://v5framework.com/index_cn.html)  
 [V5 Framework Documentation](http://v5framework.com/docs)  
 [FAQ(Frequently asked question)](https://github.com/V5Framework/V5/wiki/FAQ)  
 
