@@ -1,5 +1,5 @@
 body {
-  font: 13px/1.4 "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
+  font: 14px/1.4 "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
 }
 a {
   color: #00aaff;
@@ -12,4 +12,7 @@ a:hover {
     width: 80%;
     max-width: 960px;
     margin: 0 auto;
+}
+.version {
+    font-size: 16px;
 }
