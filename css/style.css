@@ -10,5 +10,6 @@ a:hover {
 }
 #main {
     width: 80%;
+    max-width: 960px;
     margin: 0 auto;
 }
