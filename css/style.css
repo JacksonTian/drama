@@ -1,5 +1,5 @@
 body {
-  font: 12px/1.4 "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
+  font: 13px/1.4 "Helvetica Nueue", "Lucida Grande", Arial, sans-serif;
 }
 a {
   color: #00aaff;
@@ -9,6 +9,6 @@ a:hover {
   text-decoration: underline;
 }
 #main {
-    width: 960px;
+    width: 80%;
     margin: 0 auto;
 }
