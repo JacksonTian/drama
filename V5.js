@@ -448,7 +448,7 @@
         }
         var args = hash.split("/");
         var viewName = args.shift();
-        V5.trigger("openView", viewName, effectColumn, args);
+        V5.trigger("openView", viewName, effectColumn, args, this.viewport);
     };
 
     /**
