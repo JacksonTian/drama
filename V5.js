@@ -589,3 +589,11 @@
         }
     };
 }(window));
+
+/**
+ * V5 model layer.
+ */
+(function (global) {
+    var V5 = global.V5;
+    V5.Model = {};
+}(window));
