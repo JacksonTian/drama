@@ -91,18 +91,18 @@
             }, false);
 
             // Handle refresh case or first visit.
-            if (V5.hashHistory.length === 0) {
-                var map = V5.hashMap;
-                if (_.size(map)) {
-                    // Restore view from session.
-                    console.log("Restore from session.");
-                    V5.restoreViews();
-                } else {
+            // if (V5.hashHistory.length === 0) {
+                // var map = V5.hashMap;
+                // if (_.size(map)) {
+                    // // Restore view from session.
+                    // console.log("Restore from session.");
+                    // V5.restoreViews();
+                // } else {
                     // Init card.
                     console.log("Init card.");
                     V5.initCard();
-                }
-            }
+                // }
+            // }
         });
     };
 
