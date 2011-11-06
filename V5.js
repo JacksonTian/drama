@@ -386,16 +386,16 @@
      * @namespace 
      * @private
      */
-    V5._pages = {};
+    V5._pages = V5._cards = {};
 
     /**
      * @description Register a page to V5.
      * @param {string} name Page id, used as key, V5 framework find page element by this name
      * @param {function} The module object.
      */
-    V5.registerPage = function (name, module) {
+    V5.registerPage = V5.registerCard = function (name, module) {
         if (typeof module === "function") {
-            V5._pages[name] = new V5.Page(module());
+            V5._cards[name] = new V5.Page(module());
         }
     };
 
