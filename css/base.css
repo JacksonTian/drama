@@ -114,11 +114,11 @@ input.error {
 .hidden {
     display: none;
 }
-.page {
+.card {
     display: none;
     min-height: 100%;
 }
-.page.active {
+.card.active {
     display: block;
     position: relative;
     overflow: hidden;
@@ -166,7 +166,6 @@ input.error {
     display: block;
 }
 .double .alpha {
-    /*-webkit-box-flex: 1;*/
     width: 31%;
     border-right: 1px solid #7a7978;
 }
@@ -179,15 +178,12 @@ input.error {
     display: block;
 }
 .triple .alpha {
-    /*-webkit-box-flex: 1;*/
     width: 28%;
 }
 .triple .beta {
-    /*-webkit-box-flex: 1;*/
     width: 32%;
 }
 .triple .gamma {
-    /*-webkit-box-flex: 1;*/
     width: 40%;
 }
 .viewport .alpha,

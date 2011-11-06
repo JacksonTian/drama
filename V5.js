@@ -82,7 +82,7 @@
                                 }));
                                 console.log(hashStack);
                                 V5.hashMap[hashStack[0]].pop();
-                                V5.trigger("openView", currentHash, _.indexOf(V5.columns, hashStack[0]));
+                                V5.trigger("openCard", currentHash, _.indexOf(V5.columns, hashStack[0]));
                                 console.log("Forward or back");
                             }
                         }
@@ -98,9 +98,9 @@
                     console.log("Restore from session.");
                     V5.restoreViews();
                 } else {
-                    // Init view.
-                    console.log("Init view.");
-                    V5.initView();
+                    // Init card.
+                    console.log("Init card.");
+                    V5.initCard();
                 }
             }
         });
@@ -121,9 +121,9 @@
     };
 
     /**
-     * @description Cache the page html.
+     * @description Cache the card html.
      */
-    V5._pageCache = {};
+    V5._cardCache = {};
 
     /**
      * @description Predefined view columns.
@@ -134,22 +134,22 @@
      */
     V5.columnModes = ["single", "double", "triple"];
 
-    V5.bind("openView", function (viewName, effectColumn, args, viewport) {
+    V5.bind("openCard", function (cardName, effectColumn, args, viewport) {
         if (V5.mode === "phone") {
             effectColumn = 0;
         }
         args = args || [];
         viewport = viewport || V5.viewport;
-        V5.displayView(viewName, effectColumn, args, viewport);
-        var hash = [viewName].concat(args).join("/");
-        history.pushState(hash, viewName, "#" + hash);
+        V5.displayCard(cardName, effectColumn, args, viewport);
+        var hash = [cardName].concat(args).join("/");
+        history.pushState(hash, cardName, "#" + hash);
     });
 
     /**
      * @description Initializes views when first time visit.
      */
-    V5.initView = function () {
-        V5.trigger("openView", "index", 0);
+    V5.initCard = function () {
+        V5.trigger("openCard", "index", 0);
     };
 
     /**
@@ -161,57 +161,57 @@
         _.each(map, function (viewNames, columnName) {
             var hash = viewNames.pop();
             var args = hash.split("/");
-            V5.trigger("openView", args.shift(), _.indexOf(V5.columns, columnName), args, V5.viewport);
+            V5.trigger("openCard", args.shift(), _.indexOf(V5.columns, columnName), args, V5.viewport);
         });
     };
 
     /**
-     * @description Gets View from cache or server. If the view file come from server, 
+     * @description Gets Card from cache or server. If the card file comes from server, 
      * the callback will be executed async, and cache it.
-     * @param {string} viewName View name.
-     * @param {boolean} enableL10N Flag whether this view's localization enabled.
-     * If true, will generate view with localization resources.
-     * @param {function} callback Callback function, will be called after got the view from cache or server.
+     * @param {string} cardName Card name.
+     * @param {boolean} enableL10N Flag whether this card's localization enabled.
+     * If true, will generate card with localization resources.
+     * @param {function} callback Callback function, will be called after got the card from cache or server.
      */
-    V5.getView = function (viewName, enableL10N, callback) {
-        var _pageCache = V5._pageCache;
-        var page = V5._pages[viewName];
+    V5.getCard = function (cardName, enableL10N, callback) {
+        var _cardCache = V5._cardCache;
+        var card = V5._cards[cardName];
         var proxy = new EventProxy();
-        proxy.assign("l10n", "view", function (l10n, view) {
-            var html = V5.localize(view, l10n);
-            page.resources = l10n;
+        proxy.assign("l10n", "card", function (l10n, card) {
+            var html = l10n ? V5.localize(card, l10n) : card;
+            card.resources = l10n;
             callback($(html));
         });
 
-        if (_pageCache[viewName]) {
-            proxy.trigger("view", _pageCache[viewName]);
+        if (_cardCache[cardName]) {
+            proxy.trigger("card", _cardCache[cardName]);
         } else {
-            $.get("pages/" + viewName + ".page?_=" + new Date().getTime(), function (text) {
+            $.get("cards/" + cardName + ".card?_=" + new Date().getTime(), function (text) {
                 // Save into cache.
-                _pageCache[viewName] = text;
-                proxy.trigger("view", _pageCache[viewName]);
+                _cardCache[cardName] = text;
+                proxy.trigger("card", _cardCache[cardName]);
             });
         }
 
         // Fetch the localize resources.
-        if (page.enableL10N) {
-            V5.fetchL10N(viewName, function () {
-                proxy.trigger("l10n", V5.L10N[V5.langCode][viewName]);
+        if (card.enableL10N) {
+            V5.fetchL10N(cardName, function () {
+                proxy.trigger("l10n", V5.L10N[V5.langCode][cardName]);
             });
         } else {
-            proxy.trigger("l10n", {});
+            proxy.trigger("l10n", null);
         }
     };
 
     /**
-     * @description Display view in view column.
+     * @description Display card in view column.
      * @private
-     * @param {string} hash View hash, view name.
+     * @param {string} hash Card hash, card name.
      * @param {number} effectColumn View column's index.
      * @param {array} args Parameters of view.
      * @param {object} viewport Which viewport, if don't set, will use default viewport.
      */
-    V5.displayView = function (hash, effectColumn, args, viewport) {
+    V5.displayCard = function (hash, effectColumn, args, viewport) {
         var columnName = V5.columns[effectColumn];
         var column = viewport.find("." + columnName);
         if (column.size() < 1) {
@@ -229,46 +229,46 @@
             V5.hashHistory.push([hash].concat(args));
         }
 
-        var page = V5._pages[hash];
-        if (page) {
-            var previousPage = column.find("section.page.active").removeClass("active");
-            if (previousPage.length) {
-                var id = previousPage.attr('id');
-                var previous = V5._pages[id];
+        var card = V5._cards[hash];
+        if (card) {
+            var previousCard = column.find("section.card.active").removeClass("active");
+            if (previousCard.length) {
+                var id = previousCard.attr('id');
+                var previous = V5._cards[id];
                 if (previous && id !== hash) {
                     previous.shrink();
                 }
             }
 
             var loadingNode = column.find(".column_loading").removeClass("hidden");
-            var page = V5._pages[hash];
-            V5.getView(hash, page.enableL10N, function (view) {
+            var card = V5._cards[hash];
+            V5.getCard(hash, card.enableL10N, function (node) {
                 loadingNode.addClass("hidden");
                 if (viewport === V5.viewport) {
                     viewport.attr("class", V5.columnModes[_.size(V5.hashMap) - 1]);
                 }
-                page.columnIndex = _.indexOf(V5.columns, columnName);
-                if (!page.initialized) {
-                    column.append(view);
-                    page.node = view;
-                    page.node.addClass("active");
-                    page.initialize.apply(page, args);
-                    page.initialized = true;
+                card.columnIndex = _.indexOf(V5.columns, columnName);
+                if (!card.initialized) {
+                    column.append(node);
+                    card.node = node;
+                    card.node.addClass("active");
+                    card.initialize.apply(card, args);
+                    card.initialized = true;
                 } else {
-                    if (page.parameters.toString() !== args.toString()) {
-                        page.destroy();
-                        page.node.remove();
-                        page.initialized = false;
-                        V5.getView(hash, page.enableL10N, arguments.callee);
+                    if (card.parameters.toString() !== args.toString()) {
+                        card.destroy();
+                        card.node.remove();
+                        card.initialized = false;
+                        V5.getCard(hash, card.enableL10N, arguments.callee);
                         return;
                     } else {
-                        page.node.addClass("active");
-                        page.reappear();
+                        card.node.addClass("active");
+                        card.reappear();
                     }
                 }
 
-                page.parameters = args;
-                page.viewport = viewport;
+                card.parameters = args;
+                card.viewport = viewport;
             });
         } else {
             throw hash + " module doesn't be defined.";
@@ -377,29 +377,29 @@
 }(window));
 
 /**
- * Page defined
+ * Card defined
  */
 (function (global) {
     var V5 = global.V5;
     /**
-     * @description Page namespace. All page module will be stored at here.
+     * @description Card namespace. All card module will be stored at here.
      * @namespace 
      * @private
      */
-    V5._pages = V5._cards = {};
+    V5._cards = {};
 
     /**
-     * @description Register a page to V5.
-     * @param {string} name Page id, used as key, V5 framework find page element by this name
+     * @description Register a card to V5.
+     * @param {string} name Card id, used as key/path, V5 framework find card element by this name
      * @param {function} The module object.
      */
-    V5.registerPage = V5.registerCard = function (name, module) {
+    V5.registerCard = function (name, module) {
         if (typeof module === "function") {
-            V5._cards[name] = new V5.Page(module());
+            V5._cards[name] = new V5.Card(module());
         }
     };
 
-    var Page = function (module) {
+    var Card = function (module) {
         // Mixin the eventproxy's prototype
         _.extend(this, EventProxy.prototype);
         /**
@@ -408,12 +408,12 @@
          */
         this.initialize = function () {};
         /**
-         * @description The Shrink method, will be invoked when hide current view.
+         * @description The Shrink method, will be invoked when hide current card.
          * @field {function} initialize
          */
         this.shrink = function () {};
         /**
-         * @description The Reappear method, when View reappear after shrink, this function will be invoked.
+         * @description The Reappear method, when card reappear after shrink, this function will be invoked.
          * @field {function} reappear
          */
         this.reappear = function () {};
@@ -423,7 +423,7 @@
          */
         this.destroy = function () {};
         /**
-         * @description Parameters, store the parameters, for check the view whether changed.
+         * @description Parameters, store the parameters, for check the card whether changed.
          * @field {Array} parameters
          */
         this.parameters = null;
@@ -436,10 +436,11 @@
     };
 
     /**
-     * @description Open a view from current column or next column.
-     * @memberOf Page.prototype
+     * @description Open an another card from current column or next column.
+     * @param blank Indicate whether open another card from next column.
+     * @memberOf Card.prototype
      */
-    Page.prototype.openView = function (hash, blank) {
+    Card.prototype.openCard = function (hash, blank) {
         var effectColumn;
         if (blank) {
             effectColumn = this.columnIndex + 1;
@@ -447,25 +448,25 @@
             effectColumn = this.columnIndex;
         }
         var args = hash.split("/");
-        var viewName = args.shift();
-        V5.trigger("openView", viewName, effectColumn, args, this.viewport);
+        var cardName = args.shift();
+        V5.trigger("openCard", cardName, effectColumn, args, this.viewport);
     };
 
     /**
-     * @description Open a viewport and display a page.
+     * @description Open a viewport and display a card.
      */
-    Page.prototype.openViewport = function (hash) {
+    Card.prototype.openViewport = function (hash) {
         var args = hash.split("/");
-        var view  = args.shift();
+        var cardName  = args.shift();
         var viewport = $("<div></div>").addClass("viewport");
         $(document.body).append(viewport);
-        V5.trigger("openView", view, 0, args, viewport);
+        V5.trigger("openCard", cardName, 0, args, viewport);
     };
 
     /**
-     * @description Destroy current page and close current viewport.
+     * @description Destroy current card and close current viewport.
      */
-    Page.prototype.closeViewport = function (hash) {
+    Card.prototype.closeViewport = function (hash) {
         this.destroy();
         this.node.remove();
         delete this.node;
@@ -475,41 +476,29 @@
     };
 
     /**
-     * @description Call a common module.
+     * @description Post message to Card.
      */
-    Page.prototype.call = function (moduleId) {
-        var module = V5._modules[moduleId];
-        if (module) {
-            module.V5ly(this, []);
-        } else {
-            throw moduleId + " Module doesn't exist";
-        }
-    };
-
-    /**
-     * @description Post message to Page.
-     */
-    Page.prototype.postMessage = function (event, data) {
-        this.trigger("page:" + event, data);
+    Card.prototype.postMessage = function (event, data) {
+        this.trigger("card:" + event, data);
         return this;
     };
 
     /**
      * @description Bind message event.
      */
-    Page.prototype.onMessage = function (event, callback) {
-        this.bind("page:" + event, callback);
+    Card.prototype.onMessage = function (event, callback) {
+        this.bind("card:" + event, callback);
         return this;
     };
 
     /**
-     * @description Define a page component. Page will be displayed in a view colomn.
+     * @description Define a card component. Card will be displayed in a view colomn.
      * @param {function} module Module object.
-     * @class Represents a page.
-     * @constructor V5.Page.
+     * @class Represents a card.
+     * @constructor V5.Card.
      * @memberOf V5
      */
-    V5.Page = Page;
+    V5.Card = Card;
 }(window));
 
 /**
@@ -525,6 +514,18 @@
      */
     V5.registerModule = function (moduleId, module) {
         V5._modules[moduleId] = module;
+    };
+
+    /**
+     * @description Call a common module.
+     */
+    Card.prototype.call = function (moduleId) {
+        var module = V5._modules[moduleId];
+        if (module) {
+            module.apply(this, []);
+        } else {
+            throw moduleId + " Module doesn't exist";
+        }
     };
 
 }(window));
@@ -547,13 +548,13 @@
     V5.L10N = {};
 
     /**
-     * @description Gets localization resources by view name.
-     * @param {string} viewName View name
+     * @description Gets localization resources by card name.
+     * @param {string} cardName Card name
      * @param {function} callback Callback that will be invoked when sources is got.
      */
-    V5.fetchL10N = function (viewName, callback) {
+    V5.fetchL10N = function (cardName, callback) {
         var code = V5.langCode;
-        $.getJSON("languages/" + viewName + "_" + code + ".lang?_=" + new Date().getTime(), function (data) {
+        $.getJSON("languages/" + cardName + "_" + code + ".lang?_=" + new Date().getTime(), function (data) {
             // Sets l10n resources to V5.L10N
             V5.L10N[code] = V5.L10N[code] || {};
             _.extend(V5.L10N[code], data);
@@ -583,9 +584,9 @@
 (function (global) {
     var V5 = global.V5;
     V5.postMessage = function (hash, event, data) {
-        var page = V5._pages[hash];
-        if (page) {
-            page.postMessage(event, data);
+        var card = V5._cards[hash];
+        if (card) {
+            card.postMessage(event, data);
         }
     };
 }(window));
