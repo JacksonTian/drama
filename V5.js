@@ -519,7 +519,7 @@
     /**
      * @description Call a common module.
      */
-    Card.prototype.call = function (moduleId) {
+    V5.Card.prototype.call = function (moduleId) {
         var module = V5._modules[moduleId];
         if (module) {
             module.apply(this, []);
