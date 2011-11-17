@@ -1,7 +1,8 @@
 #Welcome to the V5 framework!  
 [V5 Framework Homepage](http://v5framework.com/) | [中文版主页](http://v5framework.com/index_cn.html)  
-[V5 Framework Documentation](http://v5framework.com/docs)  
-[FAQ(Frequently asked question)](https://github.com/V5Framework/V5/wiki/FAQ)  
+[V5 Framework Documentation](http://v5framework.com/docs) | [中文版文档](http://v5framework.com/docs_cn)  
+[FAQ(Frequently asked question)](https://github.com/V5Framework/V5/wiki/FAQ) | [中文版FAQ](https://github.com/V5Framework/V5/wiki/FAQ_cn)  
+[API Docs](http://v5framework.com/api) | [中文版API文档](http://v5framework.com/api_cn)  
 
 ##Step by Step. 
 1. [Create your mobile web app with V5 framework step by step](https://github.com/V5Framework/V5/wiki/Create-your-mobile-web-app-with-V5-framework-step-by-step)  
