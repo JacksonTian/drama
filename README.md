@@ -15,5 +15,5 @@
 2. [多网页应用](https://github.com/V5Framework/V5/wiki/multipe)  
 3. [使用iScroll，令您的网页像本地程序](https://github.com/V5Framework/V5/wiki/iscroll)  
 4. [动态渲染](https://github.com/V5Framework/V5/wiki/render)  
-5. [本地化支持](https://github.com/V5Framework/V5/wiki/localization)  
+5. [国际化/本地化支持](https://github.com/V5Framework/V5/wiki/localization)  
 
