@@ -1,0 +1,7 @@
+{
+    "intro": {
+        "home": "Home",
+        "introduction": "V5 Framework Introduction",
+        "description": "V5 is a very lightweight mobile web application framework. It is based on modular/constraint development concept, divided the whole application into the window, view column, view cards and view modules. The framework can help developers to organize development structure, give application localization, data rendering support. It has life cycle, messaging features. V5 framework as a module loader and administrator, designed based on non-invasive, does not interfere with business logic and UI rendering, but also set aside a number of optimization points, with the help of a small tool that can help you deploy the product for the efficient application."
+    }
+}

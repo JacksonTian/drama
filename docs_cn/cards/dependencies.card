@@ -1,0 +1,12 @@
+<section id="dependencies" class="card">
+    <header>
+        <div class="action"><a class="home" href="javascript:;">Home</a></div>
+        <div class="title">Dependencies</div>
+        <div class="action"></a>
+    </header>
+    <article>
+        <div class="deps">
+            
+        </div>
+    </article>
+</section>

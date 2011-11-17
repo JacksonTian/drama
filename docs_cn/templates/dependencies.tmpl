@@ -1,0 +1,11 @@
+<ul class="listview">
+<%_.each(deps, function (dep, index) {%>
+    <li class="divider"><%=dep.name%></li>
+    <li>
+        <%=dep.description%>
+    </li>
+    <li>
+        <span class="key">Homepage</span>: <span class="value"><a href="<%=dep.homepage%>"><%=dep.homepage%></a></span>
+    </li>
+<%});%>
+</ul>
