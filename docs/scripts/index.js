@@ -17,7 +17,7 @@ V5.registerPage("index", function () {
             onBeforeScrollStart : function (e) {
             }
         });
-        
+
         view.scroller.refresh();
 
         view.delegateEvents({

@@ -1,0 +1,50 @@
+<section id="index" class="card">
+    <div class="scroller">
+        <header>
+            <h1 class="logo">最轻量级的移动应用程序框架：V5</h1>
+            <p class="version">Beta版本</p>
+        </header>
+
+        <article>
+            <div class="content-secondary"> 
+                <p class="intro">欢迎您浏览V5框架的主页。我们将展示给您更多的V5的细节，使您能快速高效地构建您的Mobile Web App。</p> 
+                <ul class="listview"> 
+                    <li class="divider">大纲</li> 
+                    <li><a href="#intro">V5框架介绍</a></li> 
+                    <li><a href="#features">特性</a></li>
+                    <li><a href="#dependencies">依赖库</a></li>
+                    <li><a href="#landscape">框架全景</a></li>
+                </ul>
+            </div>
+
+            <div class="content-primary"> 
+                <ul class="listview">
+                    <li class="divider">组件构成</li> 
+                    <li><a href="#component/app">App</a></li> 
+                    <li><a href="#component/viewports">Viewports</a></li> 
+                    <li><a href="#component/viewcolumns">View Columns</a></li> 
+                    <li><a href="#component/cards">Cards</a></li>
+                    <li><a href="#component/views">Views</a></li>
+
+                    <li class="divider">卡片页的生命周期</li> 
+                    <li><a href="#lifecycle/initialize">Initialize</a></li> 
+                    <li><a href="#lifecycle/shrink">Shrink</a></li>
+                    <li><a href="#lifecycle/reappear">Reappear</a></li>
+                    <li><a href="#lifecycle/destroy">Destroy</a></li>
+
+                    <li class="divider">卡片页通信</li> 
+                    <li><a href="#communication/message">消息机制</a></li> 
+
+                    <li class="divider">V5框架的MVC</li> 
+                    <li><a href="#mvc/controller">Controller</a></li> 
+                    <li><a href="#mvc/view">View</a></li>
+                    <li><a href="#mvc/model">Model</a></li>
+                </ul>
+            </div>
+        </article>
+
+        <footer> 
+                <p>&copy; 2011 The V5 Framework Project</p> 
+        </footer>
+    </div>
+</section>

@@ -1,0 +1,10 @@
+<section id="intro" class="card">
+    <header>
+        <div class="action"><a class="home" href="javascript:;">{{home}}</a></div>
+        <div class="title">{{introduction}}</div>
+        <div class="action"></a>
+    </header>
+    <article>
+        <div>{{description}}</div>
+    </article>
+</section>
