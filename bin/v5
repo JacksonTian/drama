@@ -1,0 +1,56 @@
+#!/usr/bin/env node
+var fs = require('fs');
+var fsx = require('fs-extra');
+var path = require('path');
+var ejs = require('ejs');
+var argv = require('optimist').argv;
+
+var cwd = process.cwd();
+
+var noop = function (err) {
+  if (err) {
+    throw err;
+  }
+};
+
+var card = fs.readFileSync(path.join(__dirname, '../template/card.ejs'), 'utf-8');
+var css = fs.readFileSync(path.join(__dirname, '../template/css.ejs'), 'utf-8');
+var script = fs.readFileSync(path.join(__dirname, '../template/script.ejs'), 'utf-8');
+var initCard = function (name) {
+  var folder = cwd;
+  fsx.outputFileSync(path.join(folder, 'cards', name + '.card'), ejs.render(card, {
+    name: name
+  }));
+  fsx.outputFileSync(path.join(folder, 'styles', name + '.css'), ejs.render(css, {
+    name: name
+  }));
+  fsx.outputFileSync(path.join(folder, 'scripts', name + '.js'), ejs.render(script, {
+    name: name
+  }));
+};
+
+var init = function (folder) {
+  fsx.mkdirpSync(folder);
+  fsx.mkdirpSync(path.join(folder, 'styles'));
+  fsx.mkdirpSync(path.join(folder, 'scripts'));
+  fsx.mkdirpSync(path.join(folder, 'cards'));
+
+  var cards = ['index'];
+  var index = fs.readFileSync(path.join(__dirname, '../template/index.ejs'), 'utf-8');
+  fs.writeFileSync(path.join(folder, 'index.html'), ejs.render(index, {
+    cards: cards
+  }));
+  fsx.copy(path.join(__dirname, '../V5.js'), path.join(folder, 'V5.js'), noop);
+  fsx.copy(path.join(__dirname, '../css'), path.join(folder, 'css'), noop);
+  fsx.copy(path.join(__dirname, '../lib'), path.join(folder, 'lib'), noop);
+  initCard('index');
+};
+
+switch (argv._[0]) {
+  case "init":
+    init(cwd);
+    break;
+  case "card":
+    initCard(argv._[1]);
+    break;
+}

@@ -1,0 +1,33 @@
+{
+  "name": "v5",
+  "version": "0.1.0",
+  "description": "V5 Mobile Web Framework",
+  "main": "V5.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "v5": "./bin/v5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://JacksonTian@github.com/V5Framework/V5.git"
+  },
+  "keywords": [
+    "V5",
+    "Mobile",
+    "Web",
+    "Framework"
+  ],
+  "dependencies": {
+    "optimist": "0.3.5",
+    "ejs": "*",
+    "fs-extra": "*"
+  },
+  "author": "Jackson Tian",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
