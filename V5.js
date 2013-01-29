@@ -8,7 +8,7 @@
 (function (global) {
 
     /**
-     * @description The Framework's top object. all components will be register under it.
+     * The Framework's top object. all components will be register under it.
      * @namespace Top namespace. Why named as V5, we salute the V8 project.
      * The voice means it contains power in Chinese also.
      * @requires Underscore, jQuery/Zepto.
@@ -22,7 +22,7 @@
     _.extend(V5, EventProxy.prototype);
 
     /**
-     * @description Lets callback execute at a safely moment.
+     * Lets callback execute at a safely moment.
      * @param {function} callback The callback method that will execute when document is ready.
      */
     V5.ready = function (callback) {
@@ -42,18 +42,18 @@
     };
 
     /**
-    * @description Gets the V5 mode, detects the V5 runing in which devices.
+    * Gets the V5 mode, detects the V5 runing in which devices.
     * There are two modes current, phone or tablet.
     */
     V5.mode = window.innerWidth < 768 ? "phone" : "tablet";
 
     /**
-    * @description Default viewport reference. Viewport could contains many view columns, it's detected by mode.
+    * Default viewport reference. Viewport could contains many view columns, it's detected by mode.
     */
     V5.viewport = null;
 
     /**
-     * @description Startups V5 framework.
+     * Startups V5 framework.
      */
     V5.init = function () {
         V5.ready(function () {
@@ -108,7 +108,7 @@
 
     var body = $("body");
     /**
-     * @description Handle orient change events.
+     * Handle orient change events.
      */
     V5.setOrientation = function () {
         var _setOrientation = function () {
@@ -121,16 +121,16 @@
     };
 
     /**
-     * @description Cache the card html.
+     * Cache the card html.
      */
     V5._cardCache = {};
 
     /**
-     * @description Predefined view columns.
+     * Predefined view columns.
      */
     V5.columns = ["alpha", "beta", "gamma"];
     /**
-     * @description Predefined viewport's state.
+     * Predefined viewport's state.
      */
     V5.columnModes = ["single", "double", "triple"];
 
@@ -146,14 +146,14 @@
     });
 
     /**
-     * @description Initializes views when first time visit.
+     * Initializes views when first time visit.
      */
     V5.initCard = function () {
         V5.trigger("openCard", "index", 0);
     };
 
     /**
-     * @description Restores views from session storage.
+     * Restores views from session storage.
      */
     V5.restoreViews = function () {
         var map = V5.hashMap;
@@ -166,7 +166,7 @@
     };
 
     /**
-     * @description Gets Card from cache or server. If the card file comes from server, 
+     * Gets Card from cache or server. If the card file comes from server, 
      * the callback will be executed async, and cache it.
      * @param {string} cardName Card name.
      * @param {boolean} enableL10N Flag whether this card's localization enabled.
@@ -204,7 +204,7 @@
     };
 
     /**
-     * @description Display card in view column.
+     * Display card in view column.
      * @private
      * @param {string} hash Card hash, card name.
      * @param {number} effectColumn View column's index.
@@ -276,12 +276,12 @@
     };
 
     /**
-     * @description History implementation. Stores history actions.
+     * History implementation. Stores history actions.
      */
     V5.hashHistory = [];
 
     /**
-     * @description Store hash and keep in session storage.
+     * Store hash and keep in session storage.
      */
     V5.hashMap = (function () {
         var session = getStorage("session");
@@ -305,7 +305,7 @@
  */
 (function (global) {
     /**
-     * @description A factory method to generate View object. Packaged on Backbone.View.
+     * A factory method to generate View object. Packaged on Backbone.View.
      * @param {node} node a $(Zepto/jQuery) element node.
      * @returns {View} View object, based on Backbone.View.
      */
@@ -331,7 +331,7 @@
     V5._templates = {};
 
     /**
-     * @description templateMode, optimized or normal.
+     * templateMode, optimized or normal.
      */
     V5.templateMode = "normal";
 
@@ -364,7 +364,7 @@
     };
 
     /**
-     * @description Fetch the template file.
+     * Fetch the template file.
      */
     V5.getTemplate = function (name, callback) {
         if (V5.templateMode === "normal") {
@@ -382,14 +382,14 @@
 (function (global) {
     var V5 = global.V5;
     /**
-     * @description Card namespace. All card module will be stored at here.
+     * Card namespace. All card module will be stored at here.
      * @namespace 
      * @private
      */
     V5._cards = {};
 
     /**
-     * @description Register a card to V5.
+     * Register a card to V5.
      * @param {string} name Card id, used as key/path, V5 framework find card element by this name
      * @param {function} The module object.
      */
@@ -403,32 +403,32 @@
         // Mixin the eventproxy's prototype
         _.extend(this, EventProxy.prototype);
         /**
-         * @description The Initialize method.
+         * The Initialize method.
          * @field {function} initialize
          */
         this.initialize = function () {};
         /**
-         * @description The Shrink method, will be invoked when hide current card.
+         * The Shrink method, will be invoked when hide current card.
          * @field {function} initialize
          */
         this.shrink = function () {};
         /**
-         * @description The Reappear method, when card reappear after shrink, this function will be invoked.
+         * The Reappear method, when card reappear after shrink, this function will be invoked.
          * @field {function} reappear
          */
         this.reappear = function () {};
         /**
-         * @description The Destroy method, should be invoked manually when necessary.
+         * The Destroy method, should be invoked manually when necessary.
          * @field {function} reappear
          */
         this.destroy = function () {};
         /**
-         * @description Parameters, store the parameters, for check the card whether changed.
+         * Parameters, store the parameters, for check the card whether changed.
          * @field {Array} parameters
          */
         this.parameters = null;
         /**
-         * @description Flag whether enable localization.
+         * Flag whether enable localization.
          */
         this.enableL10N = false;
         // Merge the module's methods
@@ -436,7 +436,7 @@
     };
 
     /**
-     * @description Open an another card from current column or next column.
+     * Open an another card from current column or next column.
      * @param blank Indicate whether open another card from next column.
      * @memberOf Card.prototype
      */
@@ -453,7 +453,7 @@
     };
 
     /**
-     * @description Open a viewport and display a card.
+     * Open a viewport and display a card.
      */
     Card.prototype.openViewport = function (hash) {
         var args = hash.split("/");
@@ -464,7 +464,7 @@
     };
 
     /**
-     * @description Destroy current card and close current viewport.
+     * Destroy current card and close current viewport.
      */
     Card.prototype.closeViewport = function (hash) {
         this.destroy();
@@ -476,7 +476,7 @@
     };
 
     /**
-     * @description Post message to Card.
+     * Post message to Card.
      */
     Card.prototype.postMessage = function (event, data) {
         this.trigger("card:" + event, data);
@@ -484,7 +484,7 @@
     };
 
     /**
-     * @description Bind message event.
+     * Bind message event.
      */
     Card.prototype.onMessage = function (event, callback) {
         this.bind("card:" + event, callback);
@@ -492,7 +492,7 @@
     };
 
     /**
-     * @description Define a card component. Card will be displayed in a view colomn.
+     * Define a card component. Card will be displayed in a view colomn.
      * @param {function} module Module object.
      * @class Represents a card.
      * @constructor V5.Card.
@@ -510,14 +510,14 @@
     V5._modules = {};
 
     /**
-     * @description Register a common module.
+     * Register a common module.
      */
     V5.registerModule = function (moduleId, module) {
         V5._modules[moduleId] = module;
     };
 
     /**
-     * @description Call a common module.
+     * Call a common module.
      */
     V5.Card.prototype.call = function (moduleId) {
         var module = V5._modules[moduleId];
@@ -537,18 +537,18 @@
     var V5 = global.V5;
 
     /**
-     * @description Local code.
+     * Local code.
      */
     V5.langCode = "en-US";
 
     /**
-     * @description All localization resources will be stored at here by locale code.
+     * All localization resources will be stored at here by locale code.
      * @namespace Localization resources namespace.
      */
     V5.L10N = {};
 
     /**
-     * @description Gets localization resources by card name.
+     * Gets localization resources by card name.
      * @param {string} cardName Card name
      * @param {function} callback Callback that will be invoked when sources is got.
      */
