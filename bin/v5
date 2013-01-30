@@ -3,7 +3,9 @@ var fs = require('fs');
 var fsx = require('fs-extra');
 var path = require('path');
 var ejs = require('ejs');
-var argv = require('optimist').argv;
+var argv = require('optimist')
+  .usage('Usage: \nv5 init\nv5 card [name]')
+  .demand('_').argv;
 
 var cwd = process.cwd();
 
