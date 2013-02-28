@@ -1,20 +1,29 @@
-/*global $, _, */
+/*global $, _, getStorage, Scape, EventProxy, history*/
 /**
  * @fileoverview This file is used for define the Mobile Web Framework
  * @author Jackson Tian
  * @version 0.1
  */
-
 (function (global) {
 
   /**
    * The Framework's top object. all components will be register under it.
    * @namespace Top namespace. Why named as V5, we salute the V8 project.
    * The voice means it contains power in Chinese also.
-   * @requires Underscore, jQuery/Zepto.
+   * @requires Underscore, jQuery/Zepto
    * @name V5
    */
-  var V5 = function () {};
+  var V5 = global.V5 = function () {};
+
+  /**
+   * Debug mode. If debug is true, don't cache anything
+   */
+  V5.debug = true;
+
+  /**
+   * 路径前缀
+   */
+  V5.prefix = '';
 
   /**
    * Mixin EventProxy.prototype into V5.prototype, make it has bind, unbind, trigger methods.
@@ -33,23 +42,23 @@
         if (document.readyState === "complete") {
           callback();
           // Remove the callback listener from readystatechange event.
-          $(document).unbind("readystatechange", ready);
+          document.removeEventListener("readystatechange", ready);
         }
       };
       //  Bind callback to readystatechange
-      $(document).bind("readystatechange", ready);
+      document.addEventListener("readystatechange", ready);
     }
   };
 
   /**
-  * Gets the V5 mode, detects the V5 runing in which devices.
-  * There are two modes current, phone or tablet.
-  */
+   * Gets the V5 mode, detects the V5 runing in which devices.
+   * There are two modes current, phone or tablet.
+   */
   V5.mode = window.innerWidth < 768 ? "phone" : "tablet";
 
   /**
-  * Default viewport reference. Viewport could contains many view columns, it's detected by mode.
-  */
+   * Default viewport reference. Viewport could contains many view columns, it's detected by mode.
+   */
   V5.viewport = null;
 
   /**
@@ -186,7 +195,7 @@
     if (_cardCache[cardName]) {
       proxy.trigger("card", _cardCache[cardName]);
     } else {
-      $.get("cards/" + cardName + ".card?_=" + new Date().getTime(), function (text) {
+      $.get(V5.prefix + "cards/" + cardName + ".html?_=" + new Date().getTime(), function (text) {
         // Save into cache.
         _cardCache[cardName] = text;
         proxy.trigger("card", _cardCache[cardName]);
@@ -271,7 +280,7 @@
         card.viewport = viewport;
       });
     } else {
-      throw hash + " module doesn't be defined.";
+      throw new Error(hash + " module doesn't be defined.");
     }
   };
 
@@ -297,37 +306,74 @@
     return hashMap;
   }());
 
-  global.V5 = V5;
-}(window));
+  // View
+  var View = function (el) {
+    this.el = $(el);
+  };
+  _.extend(View.prototype, EventProxy.prototype);
+  // Cached regex to split keys for `delegate`.
+  var eventSplitter = /^(\S+)\s*(.*)$/;
+  View.prototype.method = function (eventName) {
+    var that = this;
+    return function () {
+      that.emit.apply(that, [eventName].concat([].slice.call(arguments, 0)));
+    };
+  };
 
-/**
- * View
- */
-(function (global) {
+  View.prototype.$ = function (selector) {
+    return this.el.find(selector);
+  };
+
+  // Set callbacks, where `this.callbacks` is a hash of
+  //
+  // *{"event selector": "callback"}*
+  //
+  //     {
+  //       'mousedown .title':  'edit',
+  //       'click .button':     'save'
+  //     }
+  //
+  // pairs. Callbacks will be bound to the view, with `this` set properly.
+  // Uses event delegation for efficiency.
+  // Omitting the selector binds the event to `this.el`.
+  // This only works for delegate-able events: not `focus`, `blur`, and
+  // not `change`, `submit`, and `reset` in Internet Explorer.
+  View.prototype.delegateEvents = function (events) {
+    if (!(events || (events = this.events))) {
+      return;
+    }
+    if (_.isFunction(events)) {
+      events = events.call(this);
+    }
+    var that = this;
+    this.el.unbind('.delegateEvents');
+    for (var key in events) {
+      var match = key.match(eventSplitter);
+      var eventName = match[1], selector = match[2];
+      var method = that.method(events[key]);
+      eventName += '.delegateEvents';
+      if (selector === '') {
+        this.el.bind(eventName, method);
+      } else {
+        this.el.delegate(selector, eventName, method);
+      }
+    }
+  };
+
+  View.prototype.undelegateEvents = function () {
+    $(this.el).unbind();
+  };
   /**
    * A factory method to generate View object. Packaged on Backbone.View.
    * @param {node} node a $(Zepto/jQuery) element node.
    * @returns {View} View object, based on Backbone.View.
    */
-  V5.View = function (node) {
-    var View = Backbone.View.extend({
-      el: node,
-      bind: function (name, method) {
-        this[name] = method;
-      },
-      undelegateEvents: function () {
-        $(this.el).unbind();
-      }
-    });
-    return new View();
+  V5.View = function (el) {
+    return new View(el);
   };
 
-}(window));
-/**
- * Templates
- */
-(function (global) {
-  var V5 = global.V5;
+  // Templates
+
   V5._templates = {};
 
   /**
@@ -374,13 +420,8 @@
     }
   };
 
-}(window));
+  // Card defined
 
-/**
- * Card defined
- */
-(function (global) {
-  var V5 = global.V5;
   /**
    * Card namespace. All card module will be stored at here.
    * @private
@@ -399,8 +440,6 @@
   };
 
   var Card = function (module) {
-    // Mixin the eventproxy's prototype
-    _.extend(this, EventProxy.prototype);
     /**
      * The Initialize method.
      * @field {function} initialize
@@ -433,6 +472,9 @@
     // Merge the module's methods
     _.extend(this, module);
   };
+
+  // Mixin the eventproxy's prototype
+  _.extend(Card.prototype, EventProxy.prototype);
 
   /**
    * Open an another card from current column or next column.
@@ -475,7 +517,7 @@
   };
 
   /**
-   * Post message to Card.
+   * Post message to current Card.
    */
   Card.prototype.postMessage = function (event, data) {
     this.trigger("card:" + event, data);
@@ -498,14 +540,8 @@
    * @memberOf V5
    */
   V5.Card = Card;
-}(window));
 
-/**
- * Module
- */
-(function (global) {
-  var V5 = global.V5;
-
+  // Common Module
   V5._modules = {};
 
   /**
@@ -518,23 +554,17 @@
   /**
    * Call a common module.
    */
-  V5.Card.prototype.call = function (moduleId) {
+  V5.Card.prototype.invoke = function (moduleId) {
     var module = V5._modules[moduleId];
     if (module) {
-      module.apply(this, []);
+      var args = [].slice.call(arguments, 1);
+      module.apply(this, args);
     } else {
-      throw moduleId + " Module doesn't exist";
+      throw new Error(moduleId + " Module doesn't exist");
     }
   };
 
-}(window));
-
-/**
- * Localization
- */
-(function (global) {
-  var V5 = global.V5;
-
+  // Localization
   /**
    * Local code.
    */
@@ -575,25 +605,20 @@
     return compiled(resources);
   };
 
-}(window));
-
-/**
- * V5 message mechanism.
- */
-(function (global) {
-  var V5 = global.V5;
+  // Message mechanism
+  /**
+   * V5 message mechanism.
+   */
   V5.postMessage = function (hash, event, data) {
     var card = V5._cards[hash];
     if (card) {
       card.postMessage(event, data);
     }
   };
-}(window));
 
-/**
- * V5 model layer.
- */
-(function (global) {
-  var V5 = global.V5;
-  V5.Model = {};
+  // Model
+  /**
+   * V5 model layer.
+   */
+  V5.Model = new Scape();
 }(window));
