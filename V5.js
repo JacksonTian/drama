@@ -2,33 +2,129 @@
 /**
  * @fileoverview This file is used for define the Mobile Web Framework
  * @author Jackson Tian
- * @version 0.1
+ * @version 0.2
  */
 (function (global) {
 
   /**
    * The Framework's top object. all components will be register under it.
-   * @namespace Top namespace. Why named as V5, we salute the V8 project.
+   * Why named as V5, we salute the V8 project.
    * The voice means it contains power in Chinese also.
-   * @requires Underscore, jQuery/Zepto
-   * @name V5
    */
-  var V5 = global.V5 = function () {};
+  var V5 = global.V5 = new EventProxy();
+
+  V5.options = {
+    // Debug mode. If debug is true, don't cache anything
+    debug: false,
+    // 资源版本，如果服务端静态资源有更改，修改它可以用于客户端静态资源的更新
+    // 如果debug模式开启，静态资源将会每次更新
+    version: '',
+    // Assets resources path prefix
+    prefix: ''
+  };
 
   /**
-   * Debug mode. If debug is true, don't cache anything
+   * 卡片页定义，每个卡片页具有声明周期，在初始化、收缩、重打开、销毁时分别调用。
    */
-  V5.debug = true;
+  var Card = function (module) {
+    /**
+     * The Initialize method.
+     */
+    this.initialize = function () {};
+
+    /**
+     * The Shrink method, will be invoked when hide current card.
+     */
+    this.shrink = function () {};
+
+    /**
+     * The Reappear method, when card reappear after shrink, this function will be invoked.
+     */
+    this.reappear = function () {};
+
+    /**
+     * The Destroy method, should be invoked manually when necessary.
+     */
+    this.destroy = function () {};
+
+    /**
+     * Parameters, store the parameters, for check the card whether changed.
+     */
+    this.parameters = null;
+
+    /**
+     * Flag whether enable localization.
+     */
+    this.enableL10N = false;
+
+    // Merge the module's methods
+    _.extend(this, module);
+  };
+
+  // Mixin the eventproxy's prototype
+  _.extend(Card.prototype, EventProxy.prototype);
 
   /**
-   * 路径前缀
+   * Open an another card from current column or next column.
+   * @param blank Indicate whether open another card from next column.
    */
-  V5.prefix = '';
+  Card.prototype.openCard = function (hash, blank) {
+    var effectColumn;
+    if (blank) {
+      effectColumn = this.columnIndex + 1;
+    } else {
+      effectColumn = this.columnIndex;
+    }
+    var args = hash.split("/");
+    var cardName = args.shift();
+    V5.trigger("openCard", cardName, effectColumn, args, this.viewport);
+  };
 
   /**
-   * Mixin EventProxy.prototype into V5.prototype, make it has bind, unbind, trigger methods.
+   * Open a viewport and display a card.
    */
-  _.extend(V5, EventProxy.prototype);
+  Card.prototype.openViewport = function (hash) {
+    var args = hash.split("/");
+    var cardName  = args.shift();
+    var viewport = $("<div></div>").addClass("viewport");
+    body.append(viewport);
+    V5.trigger("openCard", cardName, 0, args, viewport);
+  };
+
+  /**
+   * Destroy current card and close current viewport.
+   */
+  Card.prototype.closeViewport = function (hash) {
+    this.destroy();
+    this.node.remove();
+    delete this.node;
+    this.initialized = false;
+    this.viewport.remove();
+    delete this.viewport;
+  };
+
+  /**
+   * Post message to current Card.
+   */
+  Card.prototype.postMessage = function (event, data) {
+    return this.trigger("card:" + event, data);
+  };
+
+  /**
+   * Bind message event.
+   */
+  Card.prototype.onMessage = function (event, callback) {
+    return this.bind("card:" + event, callback);
+  };
+
+  /**
+   * Define a card component. Card will be displayed in a view colomn.
+   * @param {function} module Module object.
+   * @class Represents a card.
+   * @constructor V5.Card.
+   * @memberOf V5
+   */
+  V5.Card = Card;
 
   /**
    * Lets callback execute at a safely moment.
@@ -64,7 +160,9 @@
   /**
    * Startups V5 framework.
    */
-  V5.init = function () {
+  V5.init = function (options) {
+    // 更新选项设置
+    _.extend(V5.options, options);
     V5.ready(function () {
       V5.viewport = $("#container");
       V5.setOrientation();
@@ -91,7 +189,7 @@
                 }));
                 console.log(hashStack);
                 V5.hashMap[hashStack[0]].pop();
-                V5.trigger("openCard", currentHash, _.indexOf(V5.columns, hashStack[0]));
+                V5.trigger("openCard", currentHash, V5.columns.indexOf(hashStack[0]));
                 console.log("Forward or back");
               }
             }
@@ -116,6 +214,7 @@
   };
 
   var body = $("body");
+
   /**
    * Handle orient change events.
    */
@@ -138,6 +237,7 @@
    * Predefined view columns.
    */
   V5.columns = ["alpha", "beta", "gamma"];
+
   /**
    * Predefined viewport's state.
    */
@@ -186,7 +286,7 @@
     var _cardCache = V5._cardCache;
     var card = V5._cards[cardName];
     var proxy = new EventProxy();
-    proxy.assign("l10n", "card", function (l10n, card) {
+    proxy.all("l10n", "card", function (l10n, card) {
       var html = l10n ? V5.localize(card, l10n) : card;
       card.resources = l10n;
       callback($(html));
@@ -195,7 +295,9 @@
     if (_cardCache[cardName]) {
       proxy.trigger("card", _cardCache[cardName]);
     } else {
-      $.get(V5.prefix + "cards/" + cardName + ".html?_=" + new Date().getTime(), function (text) {
+      var url = V5.prefix + "cards/" + cardName + ".html?_=";
+      url += V5.options.debug ? new Date().getTime() : V5.options.version;
+      $.get(url, function (text) {
         // Save into cache.
         _cardCache[cardName] = text;
         proxy.trigger("card", _cardCache[cardName]);
@@ -363,6 +465,7 @@
   View.prototype.undelegateEvents = function () {
     $(this.el).unbind();
   };
+
   /**
    * A factory method to generate View object. Packaged on Backbone.View.
    * @param {node} node a $(Zepto/jQuery) element node.
@@ -372,56 +475,7 @@
     return new View(el);
   };
 
-  // Templates
-
-  V5._templates = {};
-
-  /**
-   * templateMode, optimized or normal.
-   */
-  V5.templateMode = "normal";
-
-  var getTemplateNormally = function (name, callback) {
-    var template = V5._templates[name];
-    if (template) {
-      callback(template);
-    } else {
-      $.get("templates/" + name + ".tmpl?_=" + new Date().getTime(), function (templ) {
-        V5._templates[name] = templ;
-        callback(templ);
-      });
-    }
-  };
-
-  var getTemplateOptimized = function (name, callback) {
-    var template = V5._templates[name];
-    if (template) {
-      callback(template);
-    } else {
-      $.get("templates/optimized_combo.tmpl?_=" + new Date().getTime(), function (templ) {
-        $(templ).find("script").each(function (index, script) {
-          var templateNode = $(script);
-          var id = templateNode.attr("id");
-          V5._templates[id] = templateNode.html();
-        });
-        callback(V5._templates[name]);
-      });
-    }
-  };
-
-  /**
-   * Fetch the template file.
-   */
-  V5.getTemplate = function (name, callback) {
-    if (V5.templateMode === "normal") {
-      getTemplateNormally(name, callback);
-    } else {
-      getTemplateOptimized(name, callback);
-    }
-  };
-
   // Card defined
-
   /**
    * Card namespace. All card module will be stored at here.
    * @private
@@ -438,108 +492,6 @@
       V5._cards[name] = new V5.Card(module());
     }
   };
-
-  var Card = function (module) {
-    /**
-     * The Initialize method.
-     * @field {function} initialize
-     */
-    this.initialize = function () {};
-    /**
-     * The Shrink method, will be invoked when hide current card.
-     * @field {function} initialize
-     */
-    this.shrink = function () {};
-    /**
-     * The Reappear method, when card reappear after shrink, this function will be invoked.
-     * @field {function} reappear
-     */
-    this.reappear = function () {};
-    /**
-     * The Destroy method, should be invoked manually when necessary.
-     * @field {function} reappear
-     */
-    this.destroy = function () {};
-    /**
-     * Parameters, store the parameters, for check the card whether changed.
-     * @field {Array} parameters
-     */
-    this.parameters = null;
-    /**
-     * Flag whether enable localization.
-     */
-    this.enableL10N = false;
-    // Merge the module's methods
-    _.extend(this, module);
-  };
-
-  // Mixin the eventproxy's prototype
-  _.extend(Card.prototype, EventProxy.prototype);
-
-  /**
-   * Open an another card from current column or next column.
-   * @param blank Indicate whether open another card from next column.
-   * @memberOf Card.prototype
-   */
-  Card.prototype.openCard = function (hash, blank) {
-    var effectColumn;
-    if (blank) {
-      effectColumn = this.columnIndex + 1;
-    } else {
-      effectColumn = this.columnIndex;
-    }
-    var args = hash.split("/");
-    var cardName = args.shift();
-    V5.trigger("openCard", cardName, effectColumn, args, this.viewport);
-  };
-
-  /**
-   * Open a viewport and display a card.
-   */
-  Card.prototype.openViewport = function (hash) {
-    var args = hash.split("/");
-    var cardName  = args.shift();
-    var viewport = $("<div></div>").addClass("viewport");
-    $(document.body).append(viewport);
-    V5.trigger("openCard", cardName, 0, args, viewport);
-  };
-
-  /**
-   * Destroy current card and close current viewport.
-   */
-  Card.prototype.closeViewport = function (hash) {
-    this.destroy();
-    this.node.remove();
-    delete this.node;
-    this.initialized = false;
-    this.viewport.remove();
-    delete this.viewport;
-  };
-
-  /**
-   * Post message to current Card.
-   */
-  Card.prototype.postMessage = function (event, data) {
-    this.trigger("card:" + event, data);
-    return this;
-  };
-
-  /**
-   * Bind message event.
-   */
-  Card.prototype.onMessage = function (event, callback) {
-    this.bind("card:" + event, callback);
-    return this;
-  };
-
-  /**
-   * Define a card component. Card will be displayed in a view colomn.
-   * @param {function} module Module object.
-   * @class Represents a card.
-   * @constructor V5.Card.
-   * @memberOf V5
-   */
-  V5.Card = Card;
 
   // Common Module
   V5._modules = {};
@@ -583,7 +535,9 @@
    */
   V5.fetchL10N = function (cardName, callback) {
     var code = V5.langCode;
-    $.getJSON("languages/" + cardName + "_" + code + ".lang?_=" + new Date().getTime(), function (data) {
+    var url = V5.options.prefix + "languages/" + cardName + "_" + code + ".lang?_=";
+    url += V5.options.debug ? new Date().getTime() : V5.options.version;
+    $.getJSON(url, function (data) {
       // Sets l10n resources to V5.L10N
       V5.L10N[code] = V5.L10N[code] || {};
       _.extend(V5.L10N[code], data);
@@ -592,17 +546,16 @@
   };
 
   /**
-   * @desciption A wrapper method to localize template with the resources
-   * @param {string} template template string.
-   * @param {object} resources resources object.
+   * A wrapper method to localize template with the resources
+   * @param {String} tpl template string.
+   * @param {Object} resources resources object.
    * @returns rendered html string.
    */
-  V5.localize = function (template, resources) {
+  V5.localize = function (tpl, resources) {
     var settings = {
       interpolate : /\{\{(.+?)\}\}/g
     };
-    var compiled = _.compile(template, settings);
-    return compiled(resources);
+    return _.template(tpl, resources, settings);
   };
 
   // Message mechanism

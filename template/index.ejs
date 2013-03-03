@@ -7,7 +7,8 @@
   <meta name="format-detection" content="telephone=no" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <title>Your title</title>
-  <link rel="apple-touch-icon" href="images/icon.png" />
+  <link rel="apple-touch-icon" href="images/touch-icon-iphone.png" />
+  <link rel="apple-touch-startup-image" href="images/touch-startup-image.png">
   <link rel="stylesheet" href="css/base.css" /><%
 cards.forEach(function (card) {%>
   <link rel="stylesheet" href="styles/<%=card%>.css" /><%
@@ -16,9 +17,9 @@ cards.forEach(function (card) {%>
   <script>
     $LAB.script("lib/storage.js")
     .script("lib/zepto.js")
-    .script("lib/eventproxy.js")
-    .script("lib/underscore.js").wait()
-    .script("lib/backbone-0.5.3.js").wait()
+    .script("lib/eventproxy-0.2.1.js")
+    .script("lib/underscore-1.4.4.js").wait()
+    .script("lib/landscape-0.0.2.js").wait()
     .script("V5.js").wait()<%
   cards.forEach(function (card) { %>
     .script("scripts/<%=card%>.js")<%
