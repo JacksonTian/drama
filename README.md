@@ -1,7 +1,10 @@
 #Welcome to the V5 framework!
 [V5 Framework Homepage](http://html5ify.com/V5) | [中文版主页](http://html5ify.com/V5/index_cn.html)
+
 [V5 Framework Documentation](http://html5ify.com/V5/docs) | [中文版文档](http://v5framework.com/docs_cn)
+
 [FAQ(Frequently asked question)](https://github.com/JacksonTian/V5/wiki/FAQ) | [中文版FAQ](https://github.com/JacksonTian/V5/wiki/FAQ_cn)
+
 [API Docs](http://html5ify.com/V5/api) | [中文版API文档](http://http://html5ify.com/V5/api_cn)
 
 ##Step by Step.
