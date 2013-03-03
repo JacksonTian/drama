@@ -1,8 +1,11 @@
 /*global $, _, getStorage, Scape, EventProxy, history*/
 /**
- * @fileoverview This file is used for define the Mobile Web Framework
- * @author Jackson Tian
- * @version 0.2
+ * ```
+ * V5.js 0.2.0
+ * http://html5ify.com
+ * (c) 2011-2013 Jackson Tian
+ * V5 may be freely distributed under the MIT license
+ * ```
  */
 (function (global) {
 
@@ -13,6 +16,9 @@
    */
   var V5 = global.V5 = new EventProxy();
 
+  /**
+   * 默认选项
+   */
   V5.options = {
     // Debug mode. If debug is true, don't cache anything
     debug: false,
@@ -22,6 +28,10 @@
     // Assets resources path prefix
     prefix: ''
   };
+
+  /**
+   * ## Card定义
+   */
 
   /**
    * 卡片页定义，每个卡片页具有声明周期，在初始化、收缩、重打开、销毁时分别调用。
@@ -94,7 +104,7 @@
   /**
    * Destroy current card and close current viewport.
    */
-  Card.prototype.closeViewport = function (hash) {
+  Card.prototype.closeViewport = function () {
     this.destroy();
     this.node.remove();
     delete this.node;
@@ -119,10 +129,7 @@
 
   /**
    * Define a card component. Card will be displayed in a view colomn.
-   * @param {function} module Module object.
-   * @class Represents a card.
-   * @constructor V5.Card.
-   * @memberOf V5
+   * @param {Function} module Module object.
    */
   V5.Card = Card;
 
@@ -213,6 +220,7 @@
     });
   };
 
+  // 全局body对象
   var body = $("body");
 
   /**
@@ -387,6 +395,9 @@
   };
 
   /**
+   * ## History
+   */
+  /**
    * History implementation. Stores history actions.
    */
   V5.hashHistory = [];
@@ -402,13 +413,19 @@
     } else {
       session.remove("hashMap");
     }
+    // Save hash state into session storeage when unload page
     $(window).bind("unload", function () {
       session.put("hashMap", V5.hashMap);
     });
     return hashMap;
   }());
 
-  // View
+  /**
+   * ## View
+   */
+  /**
+   *
+   */
   var View = function (el) {
     this.el = $(el);
   };
@@ -427,19 +444,21 @@
   };
 
   // Set callbacks, where `this.callbacks` is a hash of
-  //
-  // *{"event selector": "callback"}*
-  //
-  //     {
-  //       'mousedown .title':  'edit',
-  //       'click .button':     'save'
-  //     }
-  //
-  // pairs. Callbacks will be bound to the view, with `this` set properly.
-  // Uses event delegation for efficiency.
-  // Omitting the selector binds the event to `this.el`.
-  // This only works for delegate-able events: not `focus`, `blur`, and
-  // not `change`, `submit`, and `reset` in Internet Explorer.
+  /**
+   * ```
+   *  {"event selector": "callback"}
+   *
+   *  {
+   *    'mousedown .title':  'edit',
+   *    'click .button':     'save'
+   *  }
+   * ```
+   * pairs. Callbacks will be bound to the view, with `this` set properly.
+   * Uses event delegation for efficiency.
+   * Omitting the selector binds the event to `this.el`.
+   * This only works for delegate-able events: not `focus`, `blur`, and
+   * not `change`, `submit`, and `reset` in Internet Explorer.
+   */
   View.prototype.delegateEvents = function (events) {
     if (!(events || (events = this.events))) {
       return;
@@ -462,6 +481,9 @@
     }
   };
 
+  /**
+   * undelegate all events
+   */
   View.prototype.undelegateEvents = function () {
     $(this.el).unbind();
   };
@@ -493,7 +515,9 @@
     }
   };
 
-  // Common Module
+  /**
+   * ## Common Module
+   */
   V5._modules = {};
 
   /**
@@ -516,7 +540,9 @@
     }
   };
 
-  // Localization
+  /**
+   * ## Localization
+   */
   /**
    * Local code.
    */
@@ -524,7 +550,7 @@
 
   /**
    * All localization resources will be stored at here by locale code.
-   * @namespace Localization resources namespace.
+   * Localization resources namespace.
    */
   V5.L10N = {};
 
@@ -558,7 +584,9 @@
     return _.template(tpl, resources, settings);
   };
 
-  // Message mechanism
+  /**
+   * ## Message mechanism
+   */
   /**
    * V5 message mechanism.
    */
@@ -569,7 +597,9 @@
     }
   };
 
-  // Model
+  /**
+   * ## Model
+   */
   /**
    * V5 model layer.
    */

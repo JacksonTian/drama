@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>V5.js</title>
+  <meta charset="utf-8" />
+  <script src="assets/prettify.js"></script>
+  <link rel="stylesheet" type="text/css" href="assets/doxco.css" />
+  <style>
+  </style>
+</head>
+<body>
+<div id="container">
+  <div id="background"></div>
+  <table>
+    <tr>
+      <th class="docs"><h1>V5.js</h1></th><th class="code"></th>
+    </tr>
+  
+    <tr id="section-1">
+      <td class="docs">
+        <div class="highlight"><pre lang="">V5.js 0.2.0
+<a href='http://html5ify.com'>http://html5ify.com</a>
+(c) 2011-2013 Jackson Tian
+V5 may be freely distributed under the MIT license
+</pre></div>
+      </td>
+      <td class="code"><pre class="prettyprint">(function (global) {</pre></td>
+    </tr>
+  
+    <tr id="section-2">
+      <td class="docs">
+        <p>The Framework's top object. all components will be register under it.<br />Why named as V5, we salute the V8 project.<br />The voice means it contains power in Chinese also.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">var V5 = global.V5 = new EventProxy();</pre></td>
+    </tr>
+  
+    <tr id="section-3">
+      <td class="docs">
+        <p>默认选项</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.options = {</pre></td>
+    </tr>
+  
+    <tr id="section-4">
+      <td class="docs">
+        <p>Debug mode. If debug is true, don&#39;t cache anything</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">    debug: false,</pre></td>
+    </tr>
+  
+    <tr id="section-5">
+      <td class="docs">
+        <p>资源版本，如果服务端静态资源有更改，修改它可以用于客户端静态资源的更新
+    如果debug模式开启，静态资源将会每次更新</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">    version: '',</pre></td>
+    </tr>
+  
+    <tr id="section-6">
+      <td class="docs">
+        <p>Assets resources path prefix</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">    prefix: ''
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-7">
+      <td class="docs">
+        <h2>Card定义</h2>
+      </td>
+      <td class="code"><pre class="prettyprint"></pre></td>
+    </tr>
+  
+    <tr id="section-8">
+      <td class="docs">
+        <p>卡片页定义，每个卡片页具有声明周期，在初始化、收缩、重打开、销毁时分别调用。</p>
+      </td>
+      <td class="code"><pre class="prettyprint">var Card = function (module) {</pre></td>
+    </tr>
+  
+    <tr id="section-9">
+      <td class="docs">
+        <p>The Initialize method.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">this.initialize = function () {};</pre></td>
+    </tr>
+  
+    <tr id="section-10">
+      <td class="docs">
+        <p>The Shrink method, will be invoked when hide current card.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">this.shrink = function () {};</pre></td>
+    </tr>
+  
+    <tr id="section-11">
+      <td class="docs">
+        <p>The Reappear method, when card reappear after shrink, this function will be invoked.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">this.reappear = function () {};</pre></td>
+    </tr>
+  
+    <tr id="section-12">
+      <td class="docs">
+        <p>The Destroy method, should be invoked manually when necessary.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">this.destroy = function () {};</pre></td>
+    </tr>
+  
+    <tr id="section-13">
+      <td class="docs">
+        <p>Parameters, store the parameters, for check the card whether changed.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">this.parameters = null;</pre></td>
+    </tr>
+  
+    <tr id="section-14">
+      <td class="docs">
+        <p>Flag whether enable localization.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">this.enableL10N = false;
+</pre></td>
+    </tr>
+  
+    <tr id="section-15">
+      <td class="docs">
+        <p>Merge the module&#39;s methods</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">    _.extend(this, module);
+  };
+</pre></td>
+    </tr>
+  
+    <tr id="section-16">
+      <td class="docs">
+        <p>Mixin the eventproxy&#39;s prototype</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">  _.extend(Card.prototype, EventProxy.prototype);</pre></td>
+    </tr>
+  
+    <tr id="section-17">
+      <td class="docs">
+        <p>Open an another card from current column or next column.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">Card.prototype.openCard = function (hash, blank) {
+    var effectColumn;
+    if (blank) {
+      effectColumn = this.columnIndex + 1;
+    } else {
+      effectColumn = this.columnIndex;
+    }
+    var args = hash.split("/");
+    var cardName = args.shift();
+    V5.trigger("openCard", cardName, effectColumn, args, this.viewport);
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-18">
+      <td class="docs">
+        <p>Open a viewport and display a card.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">Card.prototype.openViewport = function (hash) {
+    var args = hash.split("/");
+    var cardName  = args.shift();
+    var viewport = $("<div></div>").addClass("viewport");
+    body.append(viewport);
+    V5.trigger("openCard", cardName, 0, args, viewport);
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-19">
+      <td class="docs">
+        <p>Destroy current card and close current viewport.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">Card.prototype.closeViewport = function () {
+    this.destroy();
+    this.node.remove();
+    delete this.node;
+    this.initialized = false;
+    this.viewport.remove();
+    delete this.viewport;
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-20">
+      <td class="docs">
+        <p>Post message to current Card.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">Card.prototype.postMessage = function (event, data) {
+    return this.trigger("card:" + event, data);
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-21">
+      <td class="docs">
+        <p>Bind message event.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">Card.prototype.onMessage = function (event, callback) {
+    return this.bind("card:" + event, callback);
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-22">
+      <td class="docs">
+        <p>Define a card component. Card will be displayed in a view colomn.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.Card = Card;</pre></td>
+    </tr>
+  
+    <tr id="section-23">
+      <td class="docs">
+        <p>Lets callback execute at a safely moment.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.ready = function (callback) {
+    if (document.readyState === "complete") {
+      callback();
+    } else {
+      var ready = function () {
+        if (document.readyState === "complete") {
+          callback();</pre></td>
+    </tr>
+  
+    <tr id="section-24">
+      <td class="docs">
+        <p>Remove the callback listener from readystatechange event.</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">          document.removeEventListener("readystatechange", ready);
+        }
+      };</pre></td>
+    </tr>
+  
+    <tr id="section-25">
+      <td class="docs">
+        <p> Bind callback to readystatechange</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">      document.addEventListener("readystatechange", ready);
+    }
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-26">
+      <td class="docs">
+        <p>Gets the V5 mode, detects the V5 runing in which devices.<br />There are two modes current, phone or tablet.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.mode = window.innerWidth < 768 ? "phone" : "tablet";</pre></td>
+    </tr>
+  
+    <tr id="section-27">
+      <td class="docs">
+        <p>Default viewport reference. Viewport could contains many view columns, it's detected by mode.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.viewport = null;</pre></td>
+    </tr>
+  
+    <tr id="section-28">
+      <td class="docs">
+        <p>Startups V5 framework.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.init = function (options) {</pre></td>
+    </tr>
+  
+    <tr id="section-29">
+      <td class="docs">
+        <p>更新选项设置</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">    _.extend(V5.options, options);
+    V5.ready(function () {
+      V5.viewport = $("#container");
+      V5.setOrientation();</pre></td>
+    </tr>
+  
+    <tr id="section-30">
+      <td class="docs">
+        <p>Disable touch move events for integrate with iScroll.</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">      window.addEventListener("touchmove", function (e) {e.preventDefault(); }, false);</pre></td>
+    </tr>
+  
+    <tr id="section-31">
+      <td class="docs">
+        <p>Use popstate to handle history go/back.</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">      window.addEventListener('popstate', function (event) {
+        var params = event.state;
+        if (params) {
+          var args = params.split("/");
+          var currentHash = args.shift();
+          console.log("Hash Changed: " + currentHash);
+          if (V5.hashHistory.length) {
+            console.log(V5.hashHistory);
+            if (currentHash !== undefined) {
+              var topHash = _.map(V5.hashMap, function (val, key) {
+                return _.last(val);
+              });
+              if (_.include(topHash, params)) {
+                console.log("changed, but no action.");
+              } else {
+                var hashStack = _.compact(_.map(V5.hashMap, function (val, key) {
+                  return _.include(val, currentHash) ? key : null;
+                }));
+                console.log(hashStack);
+                V5.hashMap[hashStack[0]].pop();
+                V5.trigger("openCard", currentHash, V5.columns.indexOf(hashStack[0]));
+                console.log("Forward or back");
+              }
+            }
+          }
+        }
+      }, false);
+</pre></td>
+    </tr>
+  
+    <tr id="section-32">
+      <td class="docs">
+        <p>Handle refresh case or first visit.
+      if (V5.hashHistory.length === 0) {
+        var map = V5.hashMap;
+        if (_.size(map)) {
+            Restore view from session.
+            console.log(&quot;Restore from session.&quot;);
+            V5.restoreViews();
+        } else {
+            Init card.</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">          console.log("Init card.");
+          V5.initCard();</pre></td>
+    </tr>
+  
+    <tr id="section-33">
+      <td class="docs">
+        <p>}
+      }</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">    });
+  };
+</pre></td>
+    </tr>
+  
+    <tr id="section-34">
+      <td class="docs">
+        <p>全局body对象</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">  var body = $("body");</pre></td>
+    </tr>
+  
+    <tr id="section-35">
+      <td class="docs">
+        <p>Handle orient change events.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.setOrientation = function () {
+    var _setOrientation = function () {
+      var orient = Math.abs(window.orientation) === 90 ? 'landscape' : 'portrait';
+      var aspect = orient === 'landscape' ? 'portrait' : 'landscape';
+      body.removeClass(aspect).addClass(orient);
+    };
+    _setOrientation();
+    window.addEventListener('orientationchange', _setOrientation, false);
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-36">
+      <td class="docs">
+        <p>Cache the card html.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5._cardCache = {};</pre></td>
+    </tr>
+  
+    <tr id="section-37">
+      <td class="docs">
+        <p>Predefined view columns.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.columns = ["alpha", "beta", "gamma"];</pre></td>
+    </tr>
+  
+    <tr id="section-38">
+      <td class="docs">
+        <p>Predefined viewport's state.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.columnModes = ["single", "double", "triple"];
+
+  V5.bind("openCard", function (cardName, effectColumn, args, viewport) {
+    if (V5.mode === "phone") {
+      effectColumn = 0;
+    }
+    args = args || [];
+    viewport = viewport || V5.viewport;
+    V5.displayCard(cardName, effectColumn, args, viewport);
+    var hash = [cardName].concat(args).join("/");
+    history.pushState(hash, cardName, "#" + hash);
+  });</pre></td>
+    </tr>
+  
+    <tr id="section-39">
+      <td class="docs">
+        <p>Initializes views when first time visit.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.initCard = function () {
+    V5.trigger("openCard", "index", 0);
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-40">
+      <td class="docs">
+        <p>Restores views from session storage.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.restoreViews = function () {
+    var map = V5.hashMap;
+    console.log(map);
+    _.each(map, function (viewNames, columnName) {
+      var hash = viewNames.pop();
+      var args = hash.split("/");
+      V5.trigger("openCard", args.shift(), _.indexOf(V5.columns, columnName), args, V5.viewport);
+    });
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-41">
+      <td class="docs">
+        <p>Gets Card from cache or server. If the card file comes from server,<br />the callback will be executed async, and cache it.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.getCard = function (cardName, enableL10N, callback) {
+    var _cardCache = V5._cardCache;
+    var card = V5._cards[cardName];
+    var proxy = new EventProxy();
+    proxy.all("l10n", "card", function (l10n, card) {
+      var html = l10n ? V5.localize(card, l10n) : card;
+      card.resources = l10n;
+      callback($(html));
+    });
+
+    if (_cardCache[cardName]) {
+      proxy.trigger("card", _cardCache[cardName]);
+    } else {
+      var url = V5.prefix + "cards/" + cardName + ".html?_=";
+      url += V5.options.debug ? new Date().getTime() : V5.options.version;
+      $.get(url, function (text) {</pre></td>
+    </tr>
+  
+    <tr id="section-42">
+      <td class="docs">
+        <p>Save into cache.</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">        _cardCache[cardName] = text;
+        proxy.trigger("card", _cardCache[cardName]);
+      });
+    }
+</pre></td>
+    </tr>
+  
+    <tr id="section-43">
+      <td class="docs">
+        <p>Fetch the localize resources.</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">    if (card.enableL10N) {
+      V5.fetchL10N(cardName, function () {
+        proxy.trigger("l10n", V5.L10N[V5.langCode][cardName]);
+      });
+    } else {
+      proxy.trigger("l10n", null);
+    }
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-44">
+      <td class="docs">
+        <p>Display card in view column.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.displayCard = function (hash, effectColumn, args, viewport) {
+    var columnName = V5.columns[effectColumn];
+    var column = viewport.find("." + columnName);
+    if (column.size() < 1) {
+      column = $("<div><div class='column_loading'><div class='loading_animation'></div></div></div>");
+      column.addClass(columnName);
+      viewport.append(column);
+    }
+
+    if (viewport === V5.viewport) {
+      if (V5.hashMap[columnName]) {
+        V5.hashMap[columnName].push([hash].concat(args).join("/"));
+      } else {
+        V5.hashMap[columnName] = [[hash].concat(args).join("/")];
+      }
+      V5.hashHistory.push([hash].concat(args));
+    }
+
+    var card = V5._cards[hash];
+    if (card) {
+      var previousCard = column.find("section.card.active").removeClass("active");
+      if (previousCard.length) {
+        var id = previousCard.attr('id');
+        var previous = V5._cards[id];
+        if (previous && id !== hash) {
+          previous.shrink();
+        }
+      }
+
+      var loadingNode = column.find(".column_loading").removeClass("hidden");
+      card = V5._cards[hash];
+      V5.getCard(hash, card.enableL10N, function (node) {
+        loadingNode.addClass("hidden");
+        if (viewport === V5.viewport) {
+          viewport.attr("class", V5.columnModes[_.size(V5.hashMap) - 1]);
+        }
+        card.columnIndex = _.indexOf(V5.columns, columnName);
+        if (!card.initialized) {
+          column.append(node);
+          card.node = node;
+          card.node.addClass("active");
+          card.initialize.apply(card, args);
+          card.initialized = true;
+        } else {
+          if (card.parameters.toString() !== args.toString()) {
+            card.destroy();
+            card.node.remove();
+            card.initialized = false;
+            V5.getCard(hash, card.enableL10N, arguments.callee);
+            return;
+          } else {
+            card.node.addClass("active");
+            card.reappear();
+          }
+        }
+
+        card.parameters = args;
+        card.viewport = viewport;
+      });
+    } else {
+      throw new Error(hash + " module doesn't be defined.");
+    }
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-45">
+      <td class="docs">
+        <h2>History</h2>
+      </td>
+      <td class="code"><pre class="prettyprint"></pre></td>
+    </tr>
+  
+    <tr id="section-46">
+      <td class="docs">
+        <p>History implementation. Stores history actions.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.hashHistory = [];</pre></td>
+    </tr>
+  
+    <tr id="section-47">
+      <td class="docs">
+        <p>Store hash and keep in session storage.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.hashMap = (function () {
+    var session = getStorage("session");
+    var hashMap = session.get("hashMap");
+    if (!hashMap) {
+      hashMap = {};
+    } else {
+      session.remove("hashMap");
+    }</pre></td>
+    </tr>
+  
+    <tr id="section-48">
+      <td class="docs">
+        <p>Save hash state into session storeage when unload page</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">    $(window).bind("unload", function () {
+      session.put("hashMap", V5.hashMap);
+    });
+    return hashMap;
+  }());</pre></td>
+    </tr>
+  
+    <tr id="section-49">
+      <td class="docs">
+        <h2>View</h2>
+      </td>
+      <td class="code"><pre class="prettyprint"></pre></td>
+    </tr>
+  
+    <tr id="section-50">
+      <td class="docs">
+        
+      </td>
+      <td class="code"><pre class="prettyprint">var View = function (el) {
+    this.el = $(el);
+  };
+  _.extend(View.prototype, EventProxy.prototype);</pre></td>
+    </tr>
+  
+    <tr id="section-51">
+      <td class="docs">
+        <p>Cached regex to split keys for <code>delegate</code>.</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">  var eventSplitter = /^(\S+)\s*(.*)$/;
+  View.prototype.method = function (eventName) {
+    var that = this;
+    return function () {
+      that.emit.apply(that, [eventName].concat([].slice.call(arguments, 0)));
+    };
+  };
+
+  View.prototype.$ = function (selector) {
+    return this.el.find(selector);
+  };
+</pre></td>
+    </tr>
+  
+    <tr id="section-52">
+      <td class="docs">
+        <p>Set callbacks, where <code>this.callbacks</code> is a hash of</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint"></pre></td>
+    </tr>
+  
+    <tr id="section-53">
+      <td class="docs">
+        <div class="highlight"><pre lang=""> {"event selector": "callback"}
+
+ {
+   'mousedown .title':  'edit',
+   'click .button':     'save'
+ }
+</pre></div>
+
+<p>pairs. Callbacks will be bound to the view, with <code>this</code> set properly.<br />Uses event delegation for efficiency.<br />Omitting the selector binds the event to <code>this.el</code>.<br />This only works for delegate-able events: not <code>focus</code>, <code>blur</code>, and<br />not <code>change</code>, <code>submit</code>, and <code>reset</code> in Internet Explorer.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">View.prototype.delegateEvents = function (events) {
+    if (!(events || (events = this.events))) {
+      return;
+    }
+    if (_.isFunction(events)) {
+      events = events.call(this);
+    }
+    var that = this;
+    this.el.unbind('.delegateEvents');
+    for (var key in events) {
+      var match = key.match(eventSplitter);
+      var eventName = match[1], selector = match[2];
+      var method = that.method(events[key]);
+      eventName += '.delegateEvents';
+      if (selector === '') {
+        this.el.bind(eventName, method);
+      } else {
+        this.el.delegate(selector, eventName, method);
+      }
+    }
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-54">
+      <td class="docs">
+        <p>undelegate all events</p>
+      </td>
+      <td class="code"><pre class="prettyprint">View.prototype.undelegateEvents = function () {
+    $(this.el).unbind();
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-55">
+      <td class="docs">
+        <p>A factory method to generate View object. Packaged on Backbone.View.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.View = function (el) {
+    return new View(el);
+  };
+</pre></td>
+    </tr>
+  
+    <tr id="section-56">
+      <td class="docs">
+        <p>Card defined</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint"></pre></td>
+    </tr>
+  
+    <tr id="section-57">
+      <td class="docs">
+        <p>Card namespace. All card module will be stored at here.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5._cards = {};</pre></td>
+    </tr>
+  
+    <tr id="section-58">
+      <td class="docs">
+        <p>Register a card to V5.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.registerCard = function (name, module) {
+    if (typeof module === "function") {
+      V5._cards[name] = new V5.Card(module());
+    }
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-59">
+      <td class="docs">
+        <h2>Common Module</h2>
+      </td>
+      <td class="code"><pre class="prettyprint">V5._modules = {};</pre></td>
+    </tr>
+  
+    <tr id="section-60">
+      <td class="docs">
+        <p>Register a common module.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.registerModule = function (moduleId, module) {
+    V5._modules[moduleId] = module;
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-61">
+      <td class="docs">
+        <p>Call a common module.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.Card.prototype.invoke = function (moduleId) {
+    var module = V5._modules[moduleId];
+    if (module) {
+      var args = [].slice.call(arguments, 1);
+      module.apply(this, args);
+    } else {
+      throw new Error(moduleId + " Module doesn't exist");
+    }
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-62">
+      <td class="docs">
+        <h2>Localization</h2>
+      </td>
+      <td class="code"><pre class="prettyprint"></pre></td>
+    </tr>
+  
+    <tr id="section-63">
+      <td class="docs">
+        <p>Local code.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.langCode = "en-US";</pre></td>
+    </tr>
+  
+    <tr id="section-64">
+      <td class="docs">
+        <p>All localization resources will be stored at here by locale code.<br />Localization resources namespace.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.L10N = {};</pre></td>
+    </tr>
+  
+    <tr id="section-65">
+      <td class="docs">
+        <p>Gets localization resources by card name.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.fetchL10N = function (cardName, callback) {
+    var code = V5.langCode;
+    var url = V5.options.prefix + "languages/" + cardName + "_" + code + ".lang?_=";
+    url += V5.options.debug ? new Date().getTime() : V5.options.version;
+    $.getJSON(url, function (data) {</pre></td>
+    </tr>
+  
+    <tr id="section-66">
+      <td class="docs">
+        <p>Sets l10n resources to V5.L10N</p>
+
+      </td>
+      <td class="code"><pre class="prettyprint">      V5.L10N[code] = V5.L10N[code] || {};
+      _.extend(V5.L10N[code], data);
+      callback(V5.L10N[code]);
+    });
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-67">
+      <td class="docs">
+        <p>A wrapper method to localize template with the resources</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.localize = function (tpl, resources) {
+    var settings = {
+      interpolate : /\{\{(.+?)\}\}/g
+    };
+    return _.template(tpl, resources, settings);
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-68">
+      <td class="docs">
+        <h2>Message mechanism</h2>
+      </td>
+      <td class="code"><pre class="prettyprint"></pre></td>
+    </tr>
+  
+    <tr id="section-69">
+      <td class="docs">
+        <p>V5 message mechanism.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.postMessage = function (hash, event, data) {
+    var card = V5._cards[hash];
+    if (card) {
+      card.postMessage(event, data);
+    }
+  };</pre></td>
+    </tr>
+  
+    <tr id="section-70">
+      <td class="docs">
+        <h2>Model</h2>
+      </td>
+      <td class="code"><pre class="prettyprint"></pre></td>
+    </tr>
+  
+    <tr id="section-71">
+      <td class="docs">
+        <p>V5 model layer.</p>
+      </td>
+      <td class="code"><pre class="prettyprint">V5.Model = new Scape();
+}(window));</pre></td>
+    </tr>
+  
+  </table>
+</div>
+<script>
+  var codes = document.querySelectorAll('pre');
+  for (var i = 0; i < codes.length; i++) {
+    codes[i].className = 'prettyprint';
+  }
+  prettyPrint();
+</script>
+</body>
+</html>
