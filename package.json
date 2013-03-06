@@ -1,6 +1,6 @@
 {
   "name": "v5",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "V5 Mobile Web Framework",
   "main": "V5.js",
   "directories": {
