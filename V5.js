@@ -534,7 +534,7 @@
     var module = V5._modules[moduleId];
     if (module) {
       var args = [].slice.call(arguments, 1);
-      module.apply(this, args);
+      return module.apply(this, args);
     } else {
       throw new Error(moduleId + " Module doesn't exist");
     }
