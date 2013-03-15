@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-  <meta name="format-detection" content="telephone=no" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <title>Your title</title>
-  <link rel="apple-touch-icon" href="images/touch-icon-iphone.png" />
-  <link rel="apple-touch-startup-image" href="images/touch-startup-image.png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="Your title" />
+  <meta name="apple-itunes-app" content="app-id=" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="images/logo_57x57.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/logo_114x114.png" />
+  <link rel="apple-touch-startup-image" media="(max-device-width: 480px) and not (-webkit-min-device-pixel-ratio: 2)" href="images/startup_320x460.jpg">
+  <link rel="apple-touch-startup-image" media="(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)" href="images/startup_640x920.jpg">
+  <link rel="apple-touch-startup-image" media="(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)" sizes="640x1096" href="images/startup_640x1096.jpg">
   <link rel="stylesheet" href="css/base.css" /><%
 cards.forEach(function (card) {%>
   <link rel="stylesheet" href="styles/<%=card%>.css" /><%
