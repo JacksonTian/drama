@@ -16,6 +16,8 @@
    */
   var V5 = global.V5 = new EventProxy();
 
+  var $ = window.jQuery || window.Zepto;
+
   /**
    * 默认选项
    */
@@ -26,7 +28,11 @@
     // 如果debug模式开启，静态资源将会每次更新
     version: '',
     // Assets resources path prefix
-    prefix: ''
+    prefix: '',
+    // 是否预加载
+    preload: true,
+    // 主卡片页，用于启用应用时打开的页面
+    main: "index"
   };
 
   /**
@@ -106,6 +112,7 @@
    */
   Card.prototype.closeViewport = function () {
     this.destroy();
+    this.unbind();
     this.node.remove();
     delete this.node;
     this.initialized = false;
@@ -218,6 +225,13 @@
         // }
       // }
     });
+
+    // preload card file
+    if (V5.options.preload) {
+      setTimeout(function () {
+        V5.preloadCard();
+      }, 100);
+    }
   };
 
   // 全局body对象
@@ -227,7 +241,7 @@
    * Handle orient change events.
    */
   V5.setOrientation = function () {
-    var _setOrientation = function () {
+    var _setOrientation = function (event) {
       var orient = Math.abs(window.orientation) === 90 ? 'landscape' : 'portrait';
       var aspect = orient === 'landscape' ? 'portrait' : 'landscape';
       body.removeClass(aspect).addClass(orient);
@@ -235,6 +249,12 @@
     _setOrientation();
     window.addEventListener('orientationchange', _setOrientation, false);
   };
+
+  // Hide address bar
+  // When ready...
+  V5.ready(function () {
+    window.scrollTo(0, 0);
+  });
 
   /**
    * Cache the card html.
@@ -266,7 +286,7 @@
    * Initializes views when first time visit.
    */
   V5.initCard = function () {
-    V5.trigger("openCard", "index", 0);
+    V5.trigger("openCard", V5.options.main, 0);
   };
 
   /**
@@ -286,24 +306,22 @@
    * Gets Card from cache or server. If the card file comes from server,
    * the callback will be executed async, and cache it.
    * @param {string} cardName Card name.
-   * @param {boolean} enableL10N Flag whether this card's localization enabled.
-   * If true, will generate card with localization resources.
    * @param {function} callback Callback function, will be called after got the card from cache or server.
    */
-  V5.getCard = function (cardName, enableL10N, callback) {
+  V5.getCard = function (cardName, callback) {
     var _cardCache = V5._cardCache;
     var card = V5._cards[cardName];
     var proxy = new EventProxy();
     proxy.all("l10n", "card", function (l10n, card) {
       var html = l10n ? V5.localize(card, l10n) : card;
       card.resources = l10n;
-      callback($(html));
+      callback($($.trim(html)));
     });
 
     if (_cardCache[cardName]) {
       proxy.trigger("card", _cardCache[cardName]);
     } else {
-      var url = V5.prefix + "cards/" + cardName + ".html?_=";
+      var url = V5.options.prefix + "cards/" + cardName + ".html?_=";
       url += V5.options.debug ? new Date().getTime() : V5.options.version;
       $.get(url, function (text) {
         // Save into cache.
@@ -313,6 +331,8 @@
     }
 
     // Fetch the localize resources.
+    // enableL10N Flag whether this card's localization enabled.
+    // If true, will generate card with localization resources.
     if (card.enableL10N) {
       V5.fetchL10N(cardName, function () {
         proxy.trigger("l10n", V5.L10N[V5.langCode][cardName]);
@@ -320,6 +340,27 @@
     } else {
       proxy.trigger("l10n", null);
     }
+  };
+
+  /**
+   * Preload all card files
+   */
+  V5.preloadCard = function () {
+    var loaded = V5._cardCache;
+    var all = V5._cards;
+    var unloaded = [];
+    for (var name in all) {
+      if (!loaded.hasOwnProperty(name)) {
+        unloaded.push(name);
+      }
+    }
+    var continueLoad = function () {
+      var name = unloaded.shift();
+      if (name) {
+        V5.getCard(name, continueLoad);
+      }
+    };
+    continueLoad();
   };
 
   /**
@@ -334,11 +375,13 @@
     var columnName = V5.columns[effectColumn];
     var column = viewport.find("." + columnName);
     if (column.size() < 1) {
+      // 在新的viewport中打开时
       column = $("<div><div class='column_loading'><div class='loading_animation'></div></div></div>");
       column.addClass(columnName);
       viewport.append(column);
     }
 
+    // 记录到历史中，供重新打开应用时恢复
     if (viewport === V5.viewport) {
       if (V5.hashMap[columnName]) {
         V5.hashMap[columnName].push([hash].concat(args).join("/"));
@@ -349,49 +392,49 @@
     }
 
     var card = V5._cards[hash];
-    if (card) {
-      var previousCard = column.find("section.card.active").removeClass("active");
-      if (previousCard.length) {
-        var id = previousCard.attr('id');
-        var previous = V5._cards[id];
-        if (previous && id !== hash) {
-          previous.shrink();
-        }
-      }
-
-      var loadingNode = column.find(".column_loading").removeClass("hidden");
-      card = V5._cards[hash];
-      V5.getCard(hash, card.enableL10N, function (node) {
-        loadingNode.addClass("hidden");
-        if (viewport === V5.viewport) {
-          viewport.attr("class", V5.columnModes[_.size(V5.hashMap) - 1]);
-        }
-        card.columnIndex = _.indexOf(V5.columns, columnName);
-        if (!card.initialized) {
-          column.append(node);
-          card.node = node;
-          card.node.addClass("active");
-          card.initialize.apply(card, args);
-          card.initialized = true;
-        } else {
-          if (card.parameters.toString() !== args.toString()) {
-            card.destroy();
-            card.node.remove();
-            card.initialized = false;
-            V5.getCard(hash, card.enableL10N, arguments.callee);
-            return;
-          } else {
-            card.node.addClass("active");
-            card.reappear();
-          }
-        }
-
-        card.parameters = args;
-        card.viewport = viewport;
-      });
-    } else {
+    if (!card) {
       throw new Error(hash + " module doesn't be defined.");
     }
+    var previousCard = column.find("section.card.active");
+    if (previousCard.length) {
+      var id = previousCard.attr('id');
+      var previous = V5._cards[id];
+      // 如果前一张card与要打开的不是同一张card，收起它
+      if (previous && id !== hash) {
+        previous.shrink();
+      }
+    }
+
+    var loadingNode = column.find(".column_loading").removeClass("hidden");
+    V5.getCard(hash, function (node) {
+      // 隐藏前一张卡片
+      previousCard.removeClass("active");
+      loadingNode.addClass("hidden");
+      if (viewport === V5.viewport) {
+        viewport.attr("class", V5.columnModes[_.size(V5.hashMap) - 1]);
+      }
+      card.columnIndex = _.indexOf(V5.columns, columnName);
+      if (!card.initialized) {
+        column.append(node);
+        card.node = node;
+        card.node.addClass("active");
+        card.initialize.apply(card, args);
+        card.initialized = true;
+      } else if (card.parameters.toString() !== args.toString()) {
+        card.destroy();
+        card.node.remove();
+        column.append(node);
+        card.node = node;
+        card.node.addClass("active");
+        card.initialize.apply(card, args);
+      } else {
+        card.node.addClass("active");
+        card.reappear();
+      }
+      // 传递
+      card.parameters = args;
+      card.viewport = viewport;
+    });
   };
 
   /**
@@ -432,6 +475,8 @@
   _.extend(View.prototype, EventProxy.prototype);
   // Cached regex to split keys for `delegate`.
   var eventSplitter = /^(\S+)\s*(.*)$/;
+  V5.supportTouch = "ontouchend" in document;
+
   View.prototype.method = function (eventName) {
     var that = this;
     return function () {
@@ -468,9 +513,29 @@
     }
     var that = this;
     this.el.unbind('.delegateEvents');
+    var ignores = {
+      'swipe': 'click',
+      'swipeLeft': 'click', 
+      'swipeRight': 'click', 
+      'swipeUp': 'click',
+      'swipeDown': 'click'
+    };
+    var fallback = {
+      'tap': 'click',
+      'singleTap': 'click',
+      'doubleTap': 'dblclick',
+      'longTap': 'click'
+    };
     for (var key in events) {
       var match = key.match(eventSplitter);
       var eventName = match[1], selector = match[2];
+      if (!V5.supportTouch) {
+        eventName = fallback[eventName] || eventName;
+        if (ignores.hasOwnProperty(eventName)) {
+          // 在PC上忽略掉不支持的事件
+          continue;
+        }
+      }
       var method = that.method(events[key]);
       eventName += '.delegateEvents';
       if (selector === '') {
