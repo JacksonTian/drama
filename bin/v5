@@ -3,11 +3,19 @@ var fs = require('fs');
 var fsx = require('fs-extra');
 var path = require('path');
 var ejs = require('ejs');
+var _ = require('underscore');
 var argv = require('optimist')
   .usage('Usage: \nv5 init\nv5 card [name]')
   .demand('_').argv;
 
 var cwd = process.cwd();
+
+var packageInfo;
+try {
+  packageInfo = require(path.join(cwd, 'app.json'));
+} catch (err) {
+  packageInfo = {};
+}
 
 var noop = function (err) {
   if (err) {
@@ -20,7 +28,7 @@ var css = fs.readFileSync(path.join(__dirname, '../template/css.ejs'), 'utf-8');
 var script = fs.readFileSync(path.join(__dirname, '../template/script.ejs'), 'utf-8');
 var initCard = function (name) {
   var folder = cwd;
-  fsx.outputFileSync(path.join(folder, 'cards', name + '.card'), ejs.render(card, {
+  fsx.outputFileSync(path.join(folder, 'cards', name + '.html'), ejs.render(card, {
     name: name
   }));
   fsx.outputFileSync(path.join(folder, 'styles', name + '.css'), ejs.render(css, {
@@ -39,9 +47,10 @@ var init = function (folder) {
 
   var cards = ['index'];
   var index = fs.readFileSync(path.join(__dirname, '../template/index.ejs'), 'utf-8');
-  fs.writeFileSync(path.join(folder, 'index.html'), ejs.render(index, {
+  var data = _.extend(packageInfo, {
     cards: cards
-  }));
+  });
+  fs.writeFileSync(path.join(folder, 'index.html'), ejs.render(index, data));
   fsx.copy(path.join(__dirname, '../V5.js'), path.join(folder, 'V5.js'), noop);
   fsx.copy(path.join(__dirname, '../css'), path.join(folder, 'css'), noop);
   fsx.copy(path.join(__dirname, '../lib'), path.join(folder, 'lib'), noop);
@@ -49,10 +58,10 @@ var init = function (folder) {
 };
 
 switch (argv._[0]) {
-  case "init":
-    init(cwd);
-    break;
-  case "card":
-    initCard(argv._[1]);
-    break;
+case "init":
+  init(cwd);
+  break;
+case "card":
+  initCard(argv._[1]);
+  break;
 }

@@ -25,7 +25,8 @@
   "dependencies": {
     "optimist": "0.3.5",
     "ejs": "*",
-    "fs-extra": "*"
+    "fs-extra": "*",
+    "underscore": "*"
   },
   "author": "Jackson Tian",
   "license": "MIT",

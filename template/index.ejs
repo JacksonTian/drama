@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Your title</title>
+  <title><%=locals.title || 'Your title'%></title>
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <meta name="apple-mobile-web-app-title" content="Your title" />
-  <meta name="apple-itunes-app" content="app-id=" />
+  <meta name="apple-mobile-web-app-title" content="<%=locals.title || 'Your title'%>" /><%
+  if (locals.appId) {%>
+  <meta name="apple-itunes-app" content="app-id=<%=appId%>" />
+<% } %>
   <meta name="format-detection" content="telephone=no" />
   <link rel="apple-touch-icon-precomposed" sizes="57x57" href="images/logo_57x57.png" />
   <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/logo_114x114.png" />

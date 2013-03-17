@@ -166,10 +166,21 @@
    */
   V5.mode = window.innerWidth < 768 ? "phone" : "tablet";
 
+  // 全局body对象
+  var body = $("body");
+
   /**
    * Default viewport reference. Viewport could contains many view columns, it's detected by mode.
    */
   V5.viewport = null;
+
+  // Hide address bar
+  // Must called when ready
+  V5.hideAddressBar = function () {
+    body.css("height", window.innerHeight + 60);
+    window.scrollTo(0, 0);
+    body.css("height", window.innerHeight);
+  };
 
   /**
    * Startups V5 framework.
@@ -178,6 +189,7 @@
     // 更新选项设置
     _.extend(V5.options, options);
     V5.ready(function () {
+      V5.hideAddressBar();
       V5.viewport = $("#container");
       V5.setOrientation();
       // Disable touch move events for integrate with iScroll.
@@ -234,27 +246,24 @@
     }
   };
 
-  // 全局body对象
-  var body = $("body");
-
   /**
    * Handle orient change events.
    */
   V5.setOrientation = function () {
     var _setOrientation = function (event) {
-      var orient = Math.abs(window.orientation) === 90 ? 'landscape' : 'portrait';
+      var orient;
+      if ("orientation" in window) {
+        orient = Math.abs(window.orientation) === 90 ? 'landscape' : 'portrait';
+      } else {
+        var doc = document.documentElement;
+        orient = 1.1 > doc.clientWidth / doc.clientHeight ? "portrait": "landscape";
+      }
       var aspect = orient === 'landscape' ? 'portrait' : 'landscape';
       body.removeClass(aspect).addClass(orient);
     };
     _setOrientation();
     window.addEventListener('orientationchange', _setOrientation, false);
   };
-
-  // Hide address bar
-  // When ready...
-  V5.ready(function () {
-    window.scrollTo(0, 0);
-  });
 
   /**
    * Cache the card html.
@@ -363,6 +372,11 @@
     continueLoad();
   };
 
+  V5.switchCard = function (previous, next) {
+    previous.node.removeClass("active");
+    next.node.addClass("active");
+  };
+
   /**
    * Display card in view column.
    * @private
@@ -376,9 +390,13 @@
     var column = viewport.find("." + columnName);
     if (column.size() < 1) {
       // 在新的viewport中打开时
-      column = $("<div><div class='column_loading'><div class='loading_animation'></div></div></div>");
-      column.addClass(columnName);
+      column = $("<div></div>").addClass(columnName);
       viewport.append(column);
+    }
+
+    var card = V5._cards[hash];
+    if (!card) {
+      throw new Error(hash + " module doesn't be defined.");
     }
 
     // 记录到历史中，供重新打开应用时恢复
@@ -391,47 +409,51 @@
       V5.hashHistory.push([hash].concat(args));
     }
 
-    var card = V5._cards[hash];
-    if (!card) {
-      throw new Error(hash + " module doesn't be defined.");
-    }
+    var previous;
     var previousCard = column.find("section.card.active");
     if (previousCard.length) {
       var id = previousCard.attr('id');
-      var previous = V5._cards[id];
+      previous = V5._cards[id];
       // 如果前一张card与要打开的不是同一张card，收起它
       if (previous && id !== hash) {
         previous.shrink();
       }
     }
 
-    var loadingNode = column.find(".column_loading").removeClass("hidden");
     V5.getCard(hash, function (node) {
-      // 隐藏前一张卡片
-      previousCard.removeClass("active");
-      loadingNode.addClass("hidden");
       if (viewport === V5.viewport) {
         viewport.attr("class", V5.columnModes[_.size(V5.hashMap) - 1]);
       }
       card.columnIndex = _.indexOf(V5.columns, columnName);
+
+      // 首次初始化
       if (!card.initialized) {
-        column.append(node);
         card.node = node;
+        column.append(node);
+        card.initialized = true;
+        // 隐藏前一张卡片
+        previousCard.removeClass("active");
         card.node.addClass("active");
         card.initialize.apply(card, args);
-        card.initialized = true;
       } else if (card.parameters.toString() !== args.toString()) {
+        // 打开时参数不同
         card.destroy();
         card.node.remove();
-        column.append(node);
         card.node = node;
+        column.append(node);
+        // 隐藏前一张卡片
+        previousCard.removeClass("active");
         card.node.addClass("active");
         card.initialize.apply(card, args);
       } else {
+      // 重新打开
+        // 隐藏前一张卡片
+        previousCard.removeClass("active");
         card.node.addClass("active");
         card.reappear();
       }
-      // 传递
+      V5.switchCard(previous, card);
+      // 传递参数和viewport对象
       card.parameters = args;
       card.viewport = viewport;
     });
@@ -576,7 +598,9 @@
    */
   V5.registerCard = function (name, module) {
     if (typeof module === "function") {
-      V5._cards[name] = new V5.Card(module());
+      var card = new V5.Card(module());
+      card.name = name;
+      V5._cards[name] = card;
     }
   };
 
