@@ -96,6 +96,14 @@
     V5.trigger("openCard", cardName, effectColumn, args, this.viewport);
   };
 
+  Card.prototype.show = function (previous, callback) {
+    if (previous) {
+      previous.node.hide();
+    }
+    this.node.show();
+    callback();
+  };
+
   /**
    * Open a viewport and display a card.
    */
@@ -204,7 +212,7 @@
           if (V5.hashHistory.length) {
             console.log(V5.hashHistory);
             if (currentHash !== undefined) {
-              var topHash = _.map(V5.hashMap, function (val, key) {
+              var topHash = _.map(V5.hashMap, function (val) {
                 return _.last(val);
               });
               if (_.include(topHash, params)) {
@@ -372,9 +380,18 @@
     continueLoad();
   };
 
-  V5.switchCard = function (previous, next) {
-    previous.node.removeClass("active");
-    next.node.addClass("active");
+  /**
+   * 切换卡片页
+   * 设计思路是所有页面切换的逻辑由新打开的页面来决定如何打开新页和关闭旧页
+   */
+  V5.switchCard = function (next, callback) {
+    var previous = V5.currentCard;
+    // 如果前一张card与要打开的不是同一张card，收起它
+    if (previous) {
+      previous.shrink();
+    }
+    next.show(previous, callback);
+    V5.currentCard = next;
   };
 
   /**
@@ -409,17 +426,6 @@
       V5.hashHistory.push([hash].concat(args));
     }
 
-    var previous;
-    var previousCard = column.find("section.card.active");
-    if (previousCard.length) {
-      var id = previousCard.attr('id');
-      previous = V5._cards[id];
-      // 如果前一张card与要打开的不是同一张card，收起它
-      if (previous && id !== hash) {
-        previous.shrink();
-      }
-    }
-
     V5.getCard(hash, function (node) {
       if (viewport === V5.viewport) {
         viewport.attr("class", V5.columnModes[_.size(V5.hashMap) - 1]);
@@ -432,9 +438,9 @@
         column.append(node);
         card.initialized = true;
         // 隐藏前一张卡片
-        previousCard.removeClass("active");
-        card.node.addClass("active");
-        card.initialize.apply(card, args);
+        V5.switchCard(card, function () {
+          card.initialize.apply(card, args);
+        });
       } else if (card.parameters.toString() !== args.toString()) {
         // 打开时参数不同
         card.destroy();
@@ -442,17 +448,17 @@
         card.node = node;
         column.append(node);
         // 隐藏前一张卡片
-        previousCard.removeClass("active");
-        card.node.addClass("active");
-        card.initialize.apply(card, args);
+        V5.switchCard(card, function () {
+          card.initialize.apply(card, args);
+        });
       } else {
       // 重新打开
         // 隐藏前一张卡片
-        previousCard.removeClass("active");
-        card.node.addClass("active");
-        card.reappear();
+        V5.switchCard(card, function () {
+          card.reappear();
+        });
       }
-      V5.switchCard(previous, card);
+
       // 传递参数和viewport对象
       card.parameters = args;
       card.viewport = viewport;

@@ -27,9 +27,10 @@ a {
     vertical-align: baseline;
     background: transparent;
     text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
 }
 a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
@@ -46,8 +47,6 @@ footer,header,hgroup,menu,nav,section {
     display:block;
 }
 
-
-
 blockquote, q {
     quotes:none;
 }
@@ -57,8 +56,6 @@ q:before, q:after {
     content:'';
     content:none;
 }
-
-
 
 /* change colours to suit your needs */
 ins {
@@ -115,12 +112,9 @@ input.error {
     display: none;
 }
 .card {
-    display: none;
-    min-height: 100%;
-}
-.card.active {
     display: block;
-    position: relative;
+    min-height: 100%;
+    position: absolute;
     overflow: hidden;
     width: 100%;
 }
@@ -130,31 +124,6 @@ input.error {
     height: 100%;
     display: none;
     overflow: auto;
-}
-
-.column_loading {
-    min-height: 100%;
-    -webkit-box-pack: center;
-    -webkit-box-align: center;
-    display: -webkit-box;
-}
-.column_loading.hidden {
-    display: none;
-}
-.loading_animation {
-    background-image: url("../images/loading.png");
-    height: 24px;
-    width: 24px;
-    -webkit-animation: ticktock 1.5s linear infinite;
-}
-
-@-webkit-keyframes ticktock {
-    0% {
-        -webkit-transform: rotate(0);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
 }
 
 .single .alpha {
