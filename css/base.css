@@ -28,6 +28,7 @@ a {
     background: transparent;
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
 }
 a:hover {
     text-decoration: none;
