@@ -98,9 +98,9 @@
 
   Card.prototype.show = function (previous, callback) {
     if (previous) {
-      previous.node.hide();
+      previous.node.css('display', 'none');
     }
-    this.node.show();
+    this.node.css('display', 'block');
     callback();
   };
 
@@ -119,6 +119,7 @@
    * Destroy current card and close current viewport.
    */
   Card.prototype.closeViewport = function () {
+    V5.trigger('destroy', this);
     this.destroy();
     this.unbind();
     this.node.remove();
@@ -202,6 +203,9 @@
       V5.setOrientation();
       // Disable touch move events for integrate with iScroll.
       window.addEventListener("touchmove", function (e) {e.preventDefault(); }, false);
+      window.addEventListener("doubletap", function () {
+        V5.hideAddressBar();
+      }, false);
       // Use popstate to handle history go/back.
       window.addEventListener('popstate', function (event) {
         var params = event.state;
@@ -388,6 +392,7 @@
     var previous = V5.currentCard;
     // 如果前一张card与要打开的不是同一张card，收起它
     if (previous) {
+      V5.trigger('shrink', previous);
       previous.shrink();
     }
     next.show(previous, callback);
@@ -439,9 +444,11 @@
         card.initialized = true;
         // 隐藏前一张卡片
         V5.switchCard(card, function () {
+          V5.trigger('initialize', card);
           card.initialize.apply(card, args);
         });
       } else if (card.parameters.toString() !== args.toString()) {
+        V5.trigger('destroy', card);
         // 打开时参数不同
         card.destroy();
         card.node.remove();
@@ -449,12 +456,14 @@
         column.append(node);
         // 隐藏前一张卡片
         V5.switchCard(card, function () {
+          V5.trigger('initialize', card);
           card.initialize.apply(card, args);
         });
       } else {
       // 重新打开
         // 隐藏前一张卡片
         V5.switchCard(card, function () {
+          V5.trigger('reappear', card);
           card.reappear();
         });
       }
