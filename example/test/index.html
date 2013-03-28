@@ -20,14 +20,23 @@
   <script src="lib/underscore-1.4.4.js"></script>
   <script src="lib/landscape-0.0.2.js"></script>
   <script src="lib/drama.js"></script>
-  <script src="scripts/sidebar.js"></script>
+  <script src="scripts/aside.js"></script>
+  <script src="scripts/index.js"></script>
   <script>
-    drama.init();
+    $(function () {
+      drama.init({
+        sidebar: "aside",
+        debug: true
+      });
+    });
   </script>
 </head>
 <body>
-  <div id="stage">
-    <div class="alpha"></div>
+  <div id="drama">
+    <div id="sidebar">
+    </div>
+    <div id="stage">
+    </div>
   </div>
 </body>
 </html>
