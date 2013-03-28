@@ -14,24 +14,20 @@
   <link rel="apple-touch-startup-image" media="(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)" href="images/startup_640x920.jpg">
   <link rel="apple-touch-startup-image" media="(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)" sizes="640x1096" href="images/startup_640x1096.jpg">
   <link rel="stylesheet" href="css/base.css" />
-  <script src="lib/LAB.js"></script>
+  <script src="lib/storage-0.0.1.js"></script>
+  <script src="lib/zepto.js"></script>
+  <script src="lib/eventproxy-0.2.1.js"></script>
+  <script src="lib/underscore-1.4.4.js"></script>
+  <script src="lib/landscape-0.0.2.js"></script>
+  <script src="lib/drama.js"></script>
+  <script src="scripts/sidebar.js"></script>
   <script>
-    $LAB.script("lib/storage-0.0.1.js")
-    .script("lib/zepto.js")
-    .script("lib/eventproxy-0.2.1.js")
-    .script("lib/underscore-1.4.4.js").wait()
-    .script("lib/landscape-0.0.2.js").wait()
-    .script("lib/drama.js").wait()
-    .wait(function () {
-      drama.init();
-    });
+    drama.init();
   </script>
 </head>
 <body>
-<div id="container">
-  <div class="alpha"></div>
-  <div class="beta"></div>
-  <div class="gamma"></div>
-</div>
+  <div id="stage">
+    <div class="alpha"></div>
+  </div>
 </body>
 </html>
