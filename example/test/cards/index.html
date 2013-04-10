@@ -1,0 +1,43 @@
+<section id="index" class="card">
+  <script class="list" type="text/template">
+    <ul>
+    <% if (list) {
+    _.forEach(list, function (item) { %>
+      <li>
+        <div class="status"><input type="checkbox" /></div>
+        <div class="content"><%=item.content%></div>
+        <div class="action hidden"><button>删除</button></div>
+      </li>
+    <% });
+    } else {%>
+      <li>
+        <div></div>
+        <div><input type="text" /></div>
+      </li>
+    <% } %>
+    </ul>
+  </script>
+  <div>
+    <ul>
+      <li>嘻嘻</li>
+      <li>嘻嘻</li>
+      <li>嘻嘻</li>
+      <li>嘻嘻</li>
+      <li>嘻嘻</li>
+      <li>嘻嘻</li>
+      <li>嘻嘻</li>
+      <li>嘻嘻</li>
+      <li>嘻嘻</li>
+      <li>嘻嘻</li>
+    </ul>
+  </div>
+  <header class="view">
+    <a class="action" href="javascript:;"></a>
+    <h1>TODO</h1>
+    <a class="action add" href="javascript:;">Add</a>
+  </header>
+
+  <article>
+
+  </article>
+</section>

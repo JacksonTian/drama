@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <title>V5 Framework</title>
+  <link rel="apple-touch-icon" href="assets/images/icon.png" />
+  <link rel="stylesheet" href="<%=Build_CSS_Path%>" />
+  <script>
+    var script = document.createElement('script');
+    script.src = '<%=Build_JS_Path%>';
+    script.onload = function () {
+      App.init();
+    };
+    var head = document.getElementsByTagName('head')[0];
+    head.appendChild(script);
+  </script>
+</head>
+<body>
+<div id="container">
+<!-- Document here! -->
+  <div class="alpha"></div>
+  <div class="beta"></div>
+  <div class="gamma"></div>
+</div>
+</body>
+</html>

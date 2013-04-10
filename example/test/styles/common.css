@@ -1,0 +1,26 @@
+header.view {
+  height: 34px;
+  text-align: center;
+  background-color: #ff5e0d;
+  top: 0;
+  position: absolute;
+  width: 100%;
+  display: -webkit-box;
+  border-top: 1px solid #ff8649;
+  border-bottom: 1px solid #d94800;
+  -webkit-box-align: center;
+}
+header.view h1 {
+  font-size: 15px;
+  color: #fff;
+  height: 34px;
+  font-weight: normal;
+  -webkit-box-flex: 1;
+  display: -webkit-box;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+}
+header.view .action {
+  width: 60px;
+  display: block;
+}

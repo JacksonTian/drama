@@ -1,24 +1,15 @@
 {
   "predef": [
-    "module",
-    "require",
-    "__dirname",
-    "process",
-    "console",
-    "it",
-    "xit",
-    "describe",
-    "xdescribe",
-    "before",
-    "beforeEach",
-    "after",
-    "afterEach",
-    "should"
+    "location",
+    "document",
+    "parent",
+    "setTimeout",
+    "clearInterval",
+    "window",
+    "setInterval",
+    "console"
   ],
-
-  "browser": true,
   "node": true,
-  "es5": true,
   "bitwise": true,
   "curly": true,
   "eqeqeq": true,
@@ -30,14 +21,14 @@
   "nonew": true,
   "plusplus": false,
   "undef": true,
+  "unused": true,
   "strict": false,
   "trailing": false,
   "globalstrict": true,
   "nonstandard": true,
-  "white": false,
+  "white": true,
   "indent": 2,
   "expr": true,
   "multistr": true,
-  "onevar": false,
-  "unused": "vars"
+  "onevar": false
 }

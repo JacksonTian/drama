@@ -1,0 +1,9 @@
+#add {
+  background-color: #fff;
+}
+#add article {
+  bottom: 0;
+  top: 36px;
+  width: 100%;
+  position: absolute;
+}

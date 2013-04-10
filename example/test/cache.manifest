@@ -1,0 +1,16 @@
+CACHE MANIFEST
+# VERSION 201303211456
+
+FALLBACK:
+/ /404.html
+
+NETWORK:
+*
+/
+
+CACHE:
+http://m2.ihaveu.net/mobile/images/net.png?201303211456
+http://m3.ihaveu.net/mobile/images/load_bgs.png?201303211456
+http://m2.ihaveu.net/mobile/images/landscap_prompt.png?201303211456
+
+http://m1.ihaveu.net/mobile/images/sprite.png?201303211456

@@ -1,0 +1,18 @@
+#pan {
+  background-color: transparent;
+}
+#pan header {
+  top: 0;
+  height: 40px;
+  position: absolute;
+}
+#pan article {
+  bottom: 50px;
+  top: 40px;
+  position: absolute;
+}
+#pan footer {
+  bottom: 0;
+  height: 50px;
+  position: absolute;
+}
