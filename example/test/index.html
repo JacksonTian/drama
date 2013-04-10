@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Your title</title>
+  <title>测试应用</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <meta name="apple-mobile-web-app-title" content="Your title" />
+  <meta name="apple-mobile-web-app-title" content="测试应用" />
   <meta name="format-detection" content="telephone=no" />
   <link rel="apple-touch-icon-precomposed" sizes="57x57" href="images/logo_57x57.png" />
   <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/logo_114x114.png" />
@@ -14,30 +14,32 @@
   <link rel="apple-touch-startup-image" media="(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)" href="images/startup_640x920.jpg">
   <link rel="apple-touch-startup-image" media="(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)" sizes="640x1096" href="images/startup_640x1096.jpg">
   <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="styles/common.css" />
+  <script src="lib/storage-0.0.1.js"></script>
+  <script src="lib/zepto.js"></script>
+  <script src="lib/eventproxy-0.2.1.js"></script>
+  <script src="lib/underscore-1.4.4.js"></script>
+  <script src="lib/landscape-0.0.2.js"></script>
+  <script src="lib/drama.js"></script>
+  <script src="scripts/aside.js"></script>
+  <script src="scripts/index.js"></script>
+  <script src="scripts/shop.js"></script>
   <link rel="stylesheet" href="styles/index.css" />
-  <link rel="stylesheet" href="styles/add.css" />
-  <script src="lib/LAB.js"></script>
+  <link rel="stylesheet" href="styles/shop.css" />
   <script>
-    $LAB.script("lib/storage-0.0.1.js")
-    .script("lib/zepto.js")
-    .script("lib/gesture.js")
-    .script("lib/eventproxy-0.2.1.js")
-    .script("lib/underscore-1.4.4.js").wait()
-    .script("lib/landscape-0.0.2.js").wait()
-    .script("V5.js").wait()
-    .script("scripts/index.js")
-    .script("scripts/add.js")
-    .wait(function () {
-      V5.init();
+    $(function () {
+      drama.init({
+        sidebar: "aside",
+        debug: true
+      });
     });
   </script>
 </head>
 <body>
-<div id="container">
-  <div class="alpha"></div>
-  <div class="beta"></div>
-  <div class="gamma"></div>
-</div>
+  <div id="drama">
+    <div id="sidebar">
+    </div>
+    <div id="stage">
+    </div>
+  </div>
 </body>
 </html>
