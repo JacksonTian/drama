@@ -1,23 +1,19 @@
 {
-  "name": "v5",
+  "name": "drama",
   "version": "0.1.2",
-  "description": "V5 Mobile Web Framework",
-  "main": "V5.js",
-  "directories": {
-    "example": "example"
-  },
+  "description": "Drama Mobile Web Framework",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "v5": "./bin/v5"
+    "drama": "./bin/drama"
   },
   "repository": {
     "type": "git",
-    "url": "https://JacksonTian@github.com/V5Framework/V5.git"
+    "url": "git@github.com:JacksonTian/drama.git"
   },
   "keywords": [
-    "V5",
+    "Drama",
     "Mobile",
     "Web",
     "Framework"
@@ -25,8 +21,7 @@
   "dependencies": {
     "optimist": "0.3.5",
     "ejs": "*",
-    "fs-extra": "*",
-    "underscore": "*"
+    "fs-extra": "*"
   },
   "author": "Jackson Tian",
   "license": "MIT",

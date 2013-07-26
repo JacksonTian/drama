@@ -1,13 +1,12 @@
-V5.registerCard("<%=name%>", function () {
-  console.log("<%=name%> card");
-
-  var initialize = function () {
-    var card = this;
-    var view = V5.View(card.node);
-    // TODO
-  };
+/*global drama*/
+drama.addAct("<%=name%>", function () {
+  console.log(""<%=name%>" act");
 
   return {
-    initialize : initialize
+    initialize: function () {
+      var act = this;
+      var actor = new drama.Actor(this.node);
+      // TODO
+    }
   };
 });

@@ -16,31 +16,37 @@
   <link rel="apple-touch-startup-image" media="(max-device-width: 480px) and not (-webkit-min-device-pixel-ratio: 2)" href="images/startup_320x460.jpg">
   <link rel="apple-touch-startup-image" media="(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)" href="images/startup_640x920.jpg">
   <link rel="apple-touch-startup-image" media="(max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)" sizes="640x1096" href="images/startup_640x1096.jpg">
-  <link rel="stylesheet" href="css/base.css" /><%
-cards.forEach(function (card) {%>
-  <link rel="stylesheet" href="styles/<%=card%>.css" /><%
-});%>
-  <script src="lib/LAB.js"></script>
+  <link rel="stylesheet" href="css/base.css" />
+<% views.forEach(function (view) {%>
+  <link rel="stylesheet" href="styles/<%=view%>.css" />
+<% });%>
+  <script src="lib/zepto.js"></script>
+  <script src="lib/eventproxy-0.2.1.js"></script>
+  <script src="lib/underscore-1.4.4.js"></script>
+  <script src="lib/landscape-0.0.2.js"></script>
+  <script src="lib/gesture.js"></script>
+  <script src="lib/drama.js"></script>
+<% views.forEach(function (view) { %>
+  <script src="scripts/<%=view%>.js"></script>
+<% });%>
   <script>
-    $LAB.script("lib/storage-0.0.1.js")
-    .script("lib/zepto.js")
-    .script("lib/eventproxy-0.2.1.js")
-    .script("lib/underscore-1.4.4.js").wait()
-    .script("lib/landscape-0.0.2.js").wait()
-    .script("V5.js").wait()<%
-  cards.forEach(function (card) { %>
-    .script("scripts/<%=card%>.js")<%
-  });%>
-    .wait(function () {
-      V5.init();
+    $(function () {
+      drama.init({
+        sidebar: "aside",
+        main: 'login',
+        prefix: 'drama/',
+        debug: true
+      });
     });
   </script>
 </head>
 <body>
-<div id="container">
-  <div class="alpha"></div>
-  <div class="beta"></div>
-  <div class="gamma"></div>
-</div>
+  <div id="drama">
+    <div id="sidebar"></div>
+    <div id="stage"></div>
+    <div id="right_sidebar"></div>
+    <div id="background"></div>
+  </div>
+  <div id="landscape"></div>
 </body>
 </html>
